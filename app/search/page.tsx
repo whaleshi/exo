@@ -263,12 +263,12 @@ const SearchPage = () => {
                         <Link
                             href={`/meme/${item.id}`}
                             prefetch={true}
-                            className="border h-[72px] flex items-center cursor-pointer border-[#F3F3F3] mt-[8px] px-[12px]"
+                            className="h-[72px] flex items-center cursor-pointer bg-[#F8F8F8] mt-[8px] px-[12px]"
                             key={index}
                         >
                             <img
                                 src={tokenMetadata[item.address]?.image || "/default.png"}
-                                className="w-[48px] h-[48px] rounded-[0px] border border-[#F3F3F3] shrink-0 object-cover"
+                                className="w-[48px] h-[48px] rounded-[0px] bg-[#F8F8F8] shrink-0 object-cover"
                                 alt="token"
                             />
                             <div className="h-[40px] flex flex-col justify-center ml-[8px]">

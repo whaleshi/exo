@@ -419,7 +419,7 @@ const List = () => {
                     ))}
                 </div>
                 <div
-                    className="h-[32px] px-[12px] flex items-center gap-[4px] cursor-pointer border-[#F3F3F3] border text-[#101010] text-[13px]"
+                    className="h-[32px] px-[12px] flex items-center gap-[4px] cursor-pointer bg-[#F8F8F8] text-[#101010] text-[13px]"
                     onClick={() => router.push('/search')}
                 >
                     搜尋
@@ -431,7 +431,7 @@ const List = () => {
                     return (
                         <div className="mt-[8px] space-y-[8px]">
                             {[0, 1, 2].map((i) => (
-                                <div key={i} className="border h-[72px] flex items-center border-[#F3F3F3] px-[16px] animate-pulse">
+                                <div key={i} className="h-[72px] flex items-center bg-[#F8F8F8] px-[16px] animate-pulse">
                                     <div className="w-[48px] h-[48px] bg-[#F3F3F3]" />
                                     <div className="ml-[8px] flex-1">
                                         <div className="h-[16px] w-[120px] bg-[#F3F3F3] mb-[8px]" />
@@ -453,12 +453,12 @@ const List = () => {
                         <Link
                             href={`/meme/${item?.id}`}
                             prefetch={true}
-                            className="border h-[72px] flex items-center f5001 cursor-pointer border-[#F3F3F3] mt-[8px] px-[12px]"
+                            className="h-[72px] flex items-center f5001 cursor-pointer bg-[#F8F8F8] mb-[8px] px-[12px]"
                             key={index}
                         >
                             <img
                                 src={tokenMetadata[item.address]?.image || "/default.png"}
-                                className="w-[48px] h-[48px] rounded-[0px] border border-[#F3F3F3] shrink-0 object-cover"
+                                className="w-[48px] h-[48px] rounded-[0px] bg-[#F8F8F8] shrink-0 object-cover"
                                 alt="token"
                             />
                             <div className="h-[40px] flex flex-col justify-center ml-[8px]">

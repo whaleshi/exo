@@ -181,11 +181,11 @@ const Details = () => {
     return (
         <div className="w-full max-w-[450px] px-[16px] flex flex-col h-full min-h-[calc(100vh-56px)]">
             <div className="flex items-center justify-between relative pt-[16px]">
-                <div onClick={() => router.push("/")} className="relative z-1 w-[40px] h-[40px] border border-[#F3F3F3] cursor-pointer flex items-center justify-center">
+                <div onClick={() => router.push("/")} className="relative z-1 w-[40px] h-[40px] bg-[#F8F8F8] cursor-pointer flex items-center justify-center">
                     <BackIcon />
                 </div>
-                <div onClick={() => { onOpen() }} className="relative z-1 w-[40px] h-[40px] border border-[#F3F3F3] cursor-pointer flex items-center justify-center">
-                    <img src="/share.png" alt="share" width="18" height="18" className="w-[18px] h-[18px]" />
+                <div onClick={() => { onOpen() }} className="relative z-1 w-[40px] h-[40px] bg-[#F8F8F8] cursor-pointer flex items-center justify-center">
+                    <img src="/share.png" alt="share" width="14" height="14" className="w-[14px] h-[14px]" />
                 </div>
             </div>
             <Top metaData={tokenMetadata} tokenInfo={tokenInfo} progressData={progressData} />
