@@ -266,6 +266,14 @@ const List = () => {
                     allowFailure: true,
                     callData: factoryInterface.encodeFunctionData("tokensInfo", [address]),
                 });
+                // symbol 调用（直接调用 token 合约的 symbol() 方法）
+                const abiCoder = new ethers.AbiCoder();
+                const symbolSelector = ethers.id("symbol()").slice(0, 10); // 0x95d89b41
+                dataCalls.push({
+                    target: address,
+                    allowFailure: true,
+                    callData: symbolSelector, // symbol() 无参数
+                });
             }
 
             console.log(`Executing Multicall for ${validAddresses.length} tokens data...`);
@@ -279,8 +287,9 @@ const List = () => {
 
             // 解析结果并组合成完整的token数组
             const tokens = validAddresses.map((address, index) => {
-                const uriIndex = index * 2;
-                const infoIndex = index * 2 + 1;
+                const uriIndex = index * 3;
+                const infoIndex = index * 3 + 1;
+                const symbolIndex = index * 3 + 2;
 
                 // 解析 URI
                 let uri = '';
@@ -336,6 +345,19 @@ const List = () => {
                     launched: tokenInfo?.launched || false,
                     progress: progress.toFixed(2),
                     progressPercent: progress,
+                    symbol: (() => {
+                        if (dataResults[symbolIndex]?.success) {
+                            try {
+                                const abiCoder = new ethers.AbiCoder();
+                                const symbolResult = abiCoder.decode(["string"], dataResults[symbolIndex].returnData);
+                                return symbolResult[0];
+                            } catch (error) {
+                                console.warn(`Failed to decode symbol for token ${address}:`, error);
+                                return "UNKNOWN";
+                            }
+                        }
+                        return "UNKNOWN";
+                    })(),
                 };
             });
 
@@ -353,7 +375,6 @@ const List = () => {
         refetchOnWindowFocus: false, // 窗口聚焦时不重新获取
         refetchOnReconnect: true, // 重新连接时获取
     });
-
     // 设置数据到原有状态（保持兼容性）
     useEffect(() => {
         if (contractData) {
@@ -382,51 +403,27 @@ const List = () => {
     return (
         <div className="w-full max-w-[450px] pb-[32px] mx-auto px-[16px]">
             <div className="h-[54px] w-full flex items-center justify-between relative ">
-                {!isSearchExpanded ? (
-                    <>
-                        <div className="flex gap-[24px] text-[16px]">
-                            {tabs.map((tab) => (
-                                <div
-                                    key={tab.id}
-                                    className={
-                                        active === tab.id
-                                            ? "text-[#101010] cursor-pointer"
-                                            : "cursor-pointer text-[#999]"
-                                    }
-                                    onClick={() => setActive(tab.id)}
-                                >
-                                    {tab.label}
-                                </div>
-                            ))}
-                        </div>
+                <div className="flex gap-[24px] text-[16px]">
+                    {tabs.map((tab) => (
                         <div
-                            className="h-[32px] px-[12px] flex items-center gap-[4px] cursor-pointer border-[#F3F3F3] border text-[#101010] text-[13px]"
-                            onClick={() => setIsSearchExpanded(true)}
+                            key={tab.id}
+                            className={
+                                active === tab.id
+                                    ? "text-[#101010] cursor-pointer"
+                                    : "cursor-pointer text-[#999]"
+                            }
+                            onClick={() => setActive(tab.id)}
                         >
-                            搜尋
+                            {tab.label}
                         </div>
-                    </>
-                ) : (
-                    <div className="w-full h-[42px] flex items-center gap-[12px] border-[#F3F3F3] border px-[16px]">
-                        <input
-                            type="text"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            placeholder="搜尋戰壕..."
-                            className="flex-1 outline-none text-[16px] text-[#101010] placeholder:text-[#999] bg-transparent"
-                            autoFocus
-                        />
-                        <div
-                            className="cursor-pointer text-[#999] hover:text-[#101010] text-[20px] font-bold"
-                            onClick={() => {
-                                setIsSearchExpanded(false);
-                                setSearchQuery('');
-                            }}
-                        >
-                            <CloseIcon />
-                        </div>
-                    </div>
-                )}
+                    ))}
+                </div>
+                <div
+                    className="h-[32px] px-[12px] flex items-center gap-[4px] cursor-pointer border-[#F3F3F3] border text-[#101010] text-[13px]"
+                    onClick={() => router.push('/search')}
+                >
+                    搜尋
+                </div>
             </div>
             {(() => {
                 // 首屏加载：仅首次加载前展示 skeleton
@@ -456,7 +453,7 @@ const List = () => {
                         <Link
                             href={`/meme/${item?.id}`}
                             prefetch={true}
-                            className="border h-[72px] flex items-center f5001 cursor-pointer border-[#F3F3F3] mt-[8px] px-[16px]"
+                            className="border h-[72px] flex items-center f5001 cursor-pointer border-[#F3F3F3] mt-[8px] px-[12px]"
                             key={index}
                         >
                             <img
@@ -466,10 +463,15 @@ const List = () => {
                             />
                             <div className="h-[40px] flex flex-col justify-center ml-[8px]">
                                 <div className="text-[15px] font-medium text-[#101010]">
-                                    {tokenMetadata[item.address]?.symbol ||
-                                        (item?.address && item.address.length > 15
+                                    {(() => {
+                                        const symbol = item?.symbol;
+                                        if (symbol && symbol !== 'UNKNOWN') {
+                                            return symbol;
+                                        }
+                                        return item?.address && item.address.length > 15
                                             ? `${item.address.slice(0, 6)}...${item.address.slice(-4)}`
-                                            : item?.address)}
+                                            : item?.address;
+                                    })()}
                                 </div>
                                 <div>
                                     <span className="text-[11px] font-medium text-[rgba(170,170,170,1)]">
