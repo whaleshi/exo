@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+@config "../tailwind.config.js";
+
+/* 字体定义 */
+
+@font-face {
+    font-family: "Plasma";
+    src: url("/fonts/Plasma-PlasmaRegular-edgelow.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* 全局字体设置 */
+* {
+    font-family:
+        "Plasma",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        "Roboto",
+        "Oxygen",
+        "Ubuntu",
+        "Cantarell",
+        sans-serif;
+}
+
+body {
+    font-family:
+        "Plasma",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        "Roboto",
+        "Oxygen",
+        "Ubuntu",
+        "Cantarell",
+        sans-serif;
+    font-weight: normal;
+}
+
+/* Toast 自定义样式 */
+.toast-success {
+    border: 1px solid #569f8c !important;
+    background-color: #ddefea !important;
+    color: #569f8c !important;
+    height: 48px !important;
+    font-size: 13px !important;
+    text-align: center !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 0px !important;
+}
+
+.toast-error {
+    border: 1px solid #eb4b6d !important;
+    background-color: #fdd9ed !important;
+    color: #eb4b6d !important;
+    height: 48px !important;
+    font-size: 13px !important;
+    text-align: center !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 0px !important;
+}
+
+/* 钱包弹窗最高层级 */
+w3m-modal,
+w3m-modal *,
+[data-testid="w3m-modal"],
+.w3m-modal,
+.w3m-overlay,
+.w3m-container {
+    z-index: 99999 !important;
+}
+
+/* AppKit 相关组件最高层级 */
+appkit-modal,
+appkit-modal *,
+[data-testid="appkit-modal"],
+.appkit-modal,
+.appkit-overlay,
+.appkit-container {
+    z-index: 99999 !important;
+}
