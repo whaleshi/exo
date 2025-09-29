@@ -269,7 +269,7 @@ const SearchPage = () => {
                             <img
                                 src={tokenMetadata[item.address]?.image || "/default.png"}
                                 className="w-[48px] h-[48px] rounded-[0px] bg-[#F8F8F8] shrink-0 object-cover"
-                                alt="token"
+                            // alt="token"
                             />
                             <div className="h-[40px] flex flex-col justify-center ml-[8px]">
                                 <div className="text-[15px] font-medium text-[#101010]">

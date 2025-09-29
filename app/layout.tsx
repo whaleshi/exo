@@ -27,7 +27,7 @@ export const metadata: Metadata = {
         siteName: siteConfig.name,
         images: [
             {
-                url: "",
+                url: "https://exopad.mypinata.cloud/ipfs/bafkreiacmwumqnk5pjeobzk3o57walzwy274pttt5lfkixacy7t5oe5khy",
                 width: 1200,
                 height: 630,
                 alt: siteConfig.name,
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
         title: siteConfig.name,
         description: siteConfig.description,
         images: [
-            "",
+            "https://exopad.mypinata.cloud/ipfs/bafkreiacmwumqnk5pjeobzk3o57walzwy274pttt5lfkixacy7t5oe5khy",
         ],
         // 合理默认：官方账号同名
         site: "@ExoPadFun",
