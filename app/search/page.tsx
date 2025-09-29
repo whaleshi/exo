@@ -25,7 +25,7 @@ const SearchPage = () => {
     useEffect(() => {
         const fetchTokens = async () => {
             const provider = new ethers.JsonRpcProvider(DEFAULT_CHAIN_CONFIG.rpcUrl);
-            const factoryContract = new ethers.Contract(CONTRACT_CONFIG.FACTORY_CONTRACT, FactoryABI, provider);
+            const factoryContract = new ethers.Contract(CONTRACT_CONFIG.TokenManager, FactoryABI, provider);
             const factoryInterface = new ethers.Interface(FactoryABI);
             const count = await factoryContract.allTokens();
             const tokenCount = Number(count);
@@ -34,7 +34,7 @@ const SearchPage = () => {
             const addressCalls = [];
             for (let i = 0; i < tokenCount; i++) {
                 addressCalls.push({
-                    target: CONTRACT_CONFIG.FACTORY_CONTRACT,
+                    target: CONTRACT_CONFIG.TokenManager,
                     allowFailure: true,
                     callData: factoryInterface.encodeFunctionData("tokens", [i]),
                 });
@@ -64,12 +64,12 @@ const SearchPage = () => {
             const dataCalls = [];
             for (const address of validAddresses) {
                 dataCalls.push({
-                    target: CONTRACT_CONFIG.FACTORY_CONTRACT,
+                    target: CONTRACT_CONFIG.TokenManager,
                     allowFailure: true,
                     callData: factoryInterface.encodeFunctionData("uri", [address]),
                 });
                 dataCalls.push({
-                    target: CONTRACT_CONFIG.FACTORY_CONTRACT,
+                    target: CONTRACT_CONFIG.TokenManager,
                     allowFailure: true,
                     callData: factoryInterface.encodeFunctionData("tokensInfo", [address]),
                 });
@@ -313,7 +313,7 @@ const SearchPage = () => {
                 ) : (
                     <div className="flex flex-col items-center justify-center py-[60px] pt-[100px]">
                         <img src="/default.png" alt="default" className="w-[120px] h-[120px] opacity-50" />
-                        <div className="text-[#999] mt-[16px] text-[14px]">未找到匹配的戰壕</div>
+                        <div className="text-[#999] mt-[16px] text-[14px]">Nothing Here</div>
                     </div>
                 )
             )}

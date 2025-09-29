@@ -2,52 +2,47 @@
 export const CHAINS_CONFIG = {
     // 默认链 - 修改这里即可切换整个应用的默认网络
     DEFAULT_CHAIN: {
-        id: 196,
-        name: "X Layer Mainnet",
-        nativeCurrency: {
-            decimals: 18,
-            name: "OKB",
-            symbol: "OKB",
-        },
-        rpcUrls: {
-            default: { http: ["https://rpc.xlayer.tech"] },
-        },
-        blockExplorers: {
-            default: {
-                name: "OKLink",
-                url: "https://www.oklink.com/xlayer",
-                apiUrl: "https://www.oklink.com/api/v5/explorer/xlayer/api",
-            },
-        },
-        contracts: {
-            multicall3: {
-                address: "0xcA11bde05977b3631167028862bE2a173976CA11",
-                blockCreated: 47416,
-            },
-        },
-        // id: 31337,
-        // name: "Localhost",
+        // id: 196,
+        // name: "X Layer Mainnet",
         // nativeCurrency: {
         //     decimals: 18,
-        //     name: "ETH",
-        //     symbol: "ETH",
+        //     name: "OKB",
+        //     symbol: "OKB",
         // },
         // rpcUrls: {
-        //     default: { http: ["https://rpc.okbro.fun"] },
+        //     default: { http: ["https://rpc.xlayer.tech"] },
         // },
         // blockExplorers: {
         //     default: {
-        //         name: "Local Explorer",
-        //         url: "http://localhost:8888",
-        //         apiUrl: "http://localhost:8888/api",
+        //         name: "OKLink",
+        //         url: "https://www.oklink.com/xlayer",
+        //         apiUrl: "https://www.oklink.com/api/v5/explorer/xlayer/api",
         //     },
         // },
         // contracts: {
         //     multicall3: {
         //         address: "0xcA11bde05977b3631167028862bE2a173976CA11",
-        //         blockCreated: 0,
+        //         blockCreated: 47416,
         //     },
         // },
+        //
+        id: 2810,
+        name: "Morph Holesky",
+        nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+        rpcUrls: {
+            default: {
+                http: ["https://rpc-holesky.morphl2.io"],
+                webSocket: ["wss://rpc-quicknode-holesky.morphl2.io"],
+            },
+        },
+        blockExplorers: {
+            default: {
+                name: "Morph Holesky Explorer",
+                url: "https://explorer-holesky.morphl2.io",
+                apiUrl: "https://explorer-api-holesky.morphl2.io/api?",
+            },
+        },
+        testnet: true,
     },
 
     // 支持的链列表 - 按优先级排序
@@ -61,7 +56,7 @@ export const CHAINS_CONFIG = {
                 symbol: "ETH",
             },
             rpcUrls: {
-                default: { http: ["https://rpc.okbro.fun"] },
+                default: { http: ["http://72.167.44.157:8545"] },
             },
             blockExplorers: {
                 default: {
@@ -102,6 +97,25 @@ export const CHAINS_CONFIG = {
                 },
             },
         },
+        {
+            id: 2810,
+            name: "Morph Holesky",
+            nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+            rpcUrls: {
+                default: {
+                    http: ["https://rpc-holesky.morphl2.io"],
+                    webSocket: ["wss://rpc-quicknode-holesky.morphl2.io"],
+                },
+            },
+            blockExplorers: {
+                default: {
+                    name: "Morph Holesky Explorer",
+                    url: "https://explorer-holesky.morphl2.io",
+                    apiUrl: "https://explorer-api-holesky.morphl2.io/api?",
+                },
+            },
+            testnet: true,
+        },
     ],
 
     // 链相关配置
@@ -110,15 +124,19 @@ export const CHAINS_CONFIG = {
             name: "Localhost",
             symbol: "ETH",
             explorerUrl: "http://localhost:8888",
-            rpcUrl: "https://rpc.okbro.fun",
+            rpcUrl: "http://72.167.44.157:8545",
         },
         [196]: {
             name: "X Layer",
             symbol: "OKB",
             explorerUrl: "https://www.oklink.com/x-layer",
-            // rpcUrl: "https://go.getblock.io/a34782426a0f4adabd03cd7b0dcf7449",
-            // rpcUrl: "https://rpc.ankr.com/xlayer/92ba48d2f92732fd097be033dd57da282f91355ea81195cd593736cb3203d4a6"
             rpcUrl: "https://rpc.xlayer.tech", // 使用默认RPC
+        },
+        [2810]: {
+            name: "Morph Holesky",
+            symbol: "ETH",
+            explorerUrl: "https://explorer-holesky.morphl2.io",
+            rpcUrl: "https://rpc-holesky.morphl2.io",
         },
     },
 } as const;
@@ -139,7 +157,8 @@ export const getCurrentChainConfig = () => ({
 // 合约地址配置
 export const CONTRACT_CONFIG = {
     // 工厂合约地址 - 用于创建新代币
-    FACTORY_CONTRACT: "0xC012e2f925FCF089e1059eBD28fa12CFbBEE8477" as const,
+    TokenManager: "0x4787F0c2cF30868579E32cD4e9B461D5aEef8190" as const,
+    pEXOAirdrop: "0x3402978bF3139403843BBF44234b861c8B861b6F" as const,
 } as const;
 
 // Multicall3 合约地址 (通用地址，大多数链都支持)

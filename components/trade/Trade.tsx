@@ -48,7 +48,7 @@ export default function Trade({ isOpen = false, onOpenChange, initialMode = true
             try {
                 const contractABI = (await import('@/constant/abi.json')).default;
                 const provider = new ethers.JsonRpcProvider(DEFAULT_CHAIN_CONFIG.rpcUrl);
-                const readOnlyContract = new ethers.Contract(CONTRACT_CONFIG.FACTORY_CONTRACT, contractABI, provider);
+                const readOnlyContract = new ethers.Contract(CONTRACT_CONFIG.TokenManager, contractABI, provider);
 
                 if (isBuy) {
                     // 调用 tryBuy 获取预期代币输出
@@ -73,10 +73,10 @@ export default function Trade({ isOpen = false, onOpenChange, initialMode = true
     });
 
     const buyAmounts = [
-        { label: "0.1 OKB", value: 0.1 },
-        { label: "0.3 OKB", value: 0.3 },
-        { label: "0.5 OKB", value: 0.5 },
-        { label: "最多", value: 1 }
+        { label: "50 XPL", value: 50 },
+        { label: "100 XPL", value: 100 },
+        { label: "300 XPL", value: 300 },
+        { label: "500 XPL", value: 500 }
     ];
 
     const sellAmounts = [
@@ -87,8 +87,8 @@ export default function Trade({ isOpen = false, onOpenChange, initialMode = true
     ];
 
     const tabs = [
-        { id: true, label: "買入" },
-        { id: false, label: "賣出" }
+        { id: true, label: "Buy" },
+        { id: false, label: "Sell" }
     ];
 
     // 监听initialMode变化，在弹窗打开时设置对应的模式
@@ -126,7 +126,7 @@ export default function Trade({ isOpen = false, onOpenChange, initialMode = true
 
         if (isBuy) {
             // 买入时直接设置金额，确保不超过1
-            const finalAmount = Math.min(amount.value, 1);
+            const finalAmount = amount.value;
             setInputAmount(finalAmount.toString());
         } else {
             // 卖出时按百分比计算，基于实际的token余额，使用bignumber确保精度
@@ -159,7 +159,7 @@ export default function Trade({ isOpen = false, onOpenChange, initialMode = true
 
         // 验证输入金额
         if (!inputAmount || parseFloat(inputAmount) <= 0) {
-            toast.error('請輸入有效的數量', { icon: null });
+            toast.error('Please Enter Amount', { icon: null });
             return;
         }
 
@@ -171,10 +171,10 @@ export default function Trade({ isOpen = false, onOpenChange, initialMode = true
 
             if (isBuy) {
                 const result = await handleBuy(currentTokenAddress, inputAmount);
-                toast.success(`上車成功`, { icon: null });
+                toast.success(`Buy Successful ✌️`, { icon: null });
             } else {
                 const result = await handleSell(currentTokenAddress, inputAmount);
-                toast.success(`撤退成功`, { icon: null });
+                toast.success(`Sell Successful ✌️`, { icon: null });
             }
 
             await queryClient.invalidateQueries({
@@ -188,7 +188,7 @@ export default function Trade({ isOpen = false, onOpenChange, initialMode = true
             setInputAmount("");
             setOutputAmount("");
         } catch (error: any) {
-            toast.error(`${isBuy ? '上車失敗，請重試' : '撤退失敗，請重試'}`, { icon: null });
+            toast.error(`${isBuy ? 'Buy Failed, Please Retry 😭' : 'Sell Failed, Please Retry 😭'}`, { icon: null });
         } finally {
             setIsLoading(false);
         }
@@ -225,11 +225,11 @@ export default function Trade({ isOpen = false, onOpenChange, initialMode = true
                     <Input
                         classNames={{
                             inputWrapper:
-                                "px-[18px] py-3.5 rounded-none border-[1px] border-[#F3F3F3] h-[52]",
+                                "px-[18px] py-3.5 rounded-none border-0 bg-[#F8F8F8] h-[52]",
                             input: "text-[14px] text-[#101010] placeholder:text-[#999] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none",
                         }}
                         labelPlacement="outside"
-                        placeholder={isBuy ? "最大 1 OKB" : "0.00"}
+                        placeholder="0.00"
                         variant="bordered"
                         type="text"
                         inputMode="decimal"
@@ -238,16 +238,7 @@ export default function Trade({ isOpen = false, onOpenChange, initialMode = true
                             const value = e.target.value;
                             // 只允许数字和小数点
                             if (value === '' || /^\d*\.?\d*$/.test(value)) {
-                                if (isBuy) {
-                                    // 买入时限制最大值为1
-                                    const numValue = parseFloat(value);
-                                    if (value === '' || (!isNaN(numValue) && numValue <= 1)) {
-                                        setInputAmount(value);
-                                    }
-                                } else {
-                                    // 卖出时不限制
-                                    setInputAmount(value);
-                                }
+                                setInputAmount(value);
                             }
                         }}
                         onKeyDown={(e) => {
@@ -258,7 +249,7 @@ export default function Trade({ isOpen = false, onOpenChange, initialMode = true
                         }}
                         disabled={isLoading}
                         endContent={
-                            <span className="text-sm font-medium text-[#101010]">{!isBuy ? metaData?.symbol : 'OKB'}</span>
+                            <span className="text-sm font-medium text-[#101010]">{!isBuy ? metaData?.symbol : 'XPL'}</span>
                         }
                     />
                 </div>
@@ -277,19 +268,17 @@ export default function Trade({ isOpen = false, onOpenChange, initialMode = true
                     ))}
                 </div>
                 <div className="flex items-center justify-between">
-                    <span className="text-[#EB4B6D] text-xs">
-                        {isBuy && '* 每次最多 1 OKB'}
-                    </span>
+                    <span></span>
                     <span className="text-[#999] text-xs">
-                        餘額 <i className="text-[#101010]  not-italic">{isConnected ? formatBigNumber(isBuy ? balances?.walletBalance : balances?.tokenBalance) : '-'}</i>
+                        Balance <i className="text-[#101010]  not-italic">{isConnected ? formatBigNumber(isBuy ? balances?.walletBalance : balances?.tokenBalance) : '-'}</i>
                     </span>
                 </div>
                 <div>
-                    <div className="text-[16px] text-[#101010] mb-[12px]">戰利品</div>
+                    <div className="text-[16px] text-[#101010] mb-[12px]">Expected Amount</div>
                     <Input
                         classNames={{
                             inputWrapper:
-                                "px-[18px] py-3.5 rounded-none border-[1px] border-[#F3F3F3] h-[52]",
+                                "px-[18px] py-3.5 rounded-none bg-[#F8F8F8] border-0 h-[52]",
                             input: "text-[14px] text-[#101010] placeholder:text-[#999]",
                         }}
                         labelPlacement="outside"
@@ -298,7 +287,7 @@ export default function Trade({ isOpen = false, onOpenChange, initialMode = true
                         value={outputAmount}
                         readOnly
                         endContent={
-                            <span className="text-sm font-medium text-[#101010]">{isBuy ? metaData?.symbol : 'OKB'}</span>
+                            <span className="text-sm font-medium text-[#101010]">{isBuy ? metaData?.symbol : 'XPL'}</span>
                         }
                     />
                 </div>
@@ -310,19 +299,19 @@ export default function Trade({ isOpen = false, onOpenChange, initialMode = true
                     isLoading={isLoading}
                     onPress={handleTradeSubmit}
                 >
-                    {isLoading ? "交易中..." : !isConnected ? "連接戰壕" : (isBuy ? "立即上車" : "立即撤退")}
+                    {isLoading ? "Trading..." : !isConnected ? "Connect Wallet" : (isBuy ? "Buy" : "Sell")}
                 </Button>
 
                 <div className="border p-4 border-solid border-[#F3F3F3] mb-[10px]">
                     <div className="flex items-center justify-between text-[12px]">
-                        <span className="text-[#999] ">滑點</span>
+                        <span className="text-[#999] ">Slippage</span>
                         <span className="text-[#999]">
                             <span className="underline text-[#101010]">{slippage}%</span>
                             <span
                                 className="cursor-pointer hover:text-[#569F8C] ml-[4px]"
                                 onClick={() => setIsSlippageOpen(true)}
                             >
-                                設定
+                                Setting
                             </span>
                         </span>
                     </div>

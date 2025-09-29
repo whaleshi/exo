@@ -84,8 +84,8 @@ const Trade = ({ metaData, progressData }: any) => {
 
         setIsQuickBuyLoading(true);
         try {
-            await handleBuy(tokenAddress, '1');
-            toast.success('上車成功', { icon: null });
+            await handleBuy(tokenAddress, '50');
+            toast.success('Buy Successful ✌️', { icon: null });
 
             // 刷新余额
             await queryClient.invalidateQueries({
@@ -95,7 +95,7 @@ const Trade = ({ metaData, progressData }: any) => {
                 queryKey: ['walletBalance']
             });
         } catch (error: any) {
-            toast.error(`上車失敗，請重試`, { icon: null });
+            toast.error(`Buy Failed, Please Retry 😭`, { icon: null });
         } finally {
             setIsQuickBuyLoading(false);
         }
@@ -109,14 +109,14 @@ const Trade = ({ metaData, progressData }: any) => {
         }
 
         if (!tokenBalance || parseFloat(tokenBalance) <= 0) {
-            toast.error('餘額為 0', { icon: null });
+            toast.error('Insufficient balance', { icon: null });
             return;
         }
 
         setIsSellAllLoading(true);
         try {
             await handleSell(tokenAddress, tokenBalance);
-            toast.success('撤退成功', { icon: null });
+            toast.success('Sell Successful ✌️', { icon: null });
 
             // 刷新余额
             await queryClient.invalidateQueries({
@@ -126,7 +126,7 @@ const Trade = ({ metaData, progressData }: any) => {
                 queryKey: ['walletBalance']
             });
         } catch (error: any) {
-            toast.error(`撤退失敗，請重試`, { icon: null });
+            toast.error(`Sell Failed, Please Retry 😭`, { icon: null });
         } finally {
             setIsSellAllLoading(false);
         }
@@ -151,7 +151,7 @@ const Trade = ({ metaData, progressData }: any) => {
                         isLoading={isSellAllLoading}
                         onPress={handleSellAll}
                     >
-                        {isSellAllLoading ? '賣出中...' : '全部賣出'}
+                        {isSellAllLoading ? 'Trading...' : 'All Sell'}
                     </Button> : <Button
                         radius="none"
                         className="w-full h-[48px] bg-[#DDEFEA] border-[#569F8C] border-1 text-[14px] text-[#569F8C]"
@@ -159,7 +159,7 @@ const Trade = ({ metaData, progressData }: any) => {
                         isLoading={isQuickBuyLoading}
                         onPress={handleQuickBuy}
                     >
-                        {isQuickBuyLoading ? '買入中...' : '快買 1 OKB'}
+                        {isQuickBuyLoading ? 'Trading...' : 'Quick Buy 50 XPL'}
                     </Button>
                 }
                 <div className="mt-[12px] flex gap-[12px]">
@@ -174,7 +174,7 @@ const Trade = ({ metaData, progressData }: any) => {
                                 }
                             }}
                         >
-                            賣出
+                            Sell
                         </Button>
                     }
                     <Button
@@ -185,7 +185,7 @@ const Trade = ({ metaData, progressData }: any) => {
                             setIsTradePopupOpen(true);
                         }}
                     >
-                        {hasTokenBalance ? '買入' : '立即上車'}
+                        {hasTokenBalance ? 'Buy' : 'Buy Now'}
                     </Button>
                 </div>
             </> : <>

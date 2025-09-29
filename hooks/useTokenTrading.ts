@@ -48,7 +48,7 @@ export const useTokenTrading = () => {
         console.log("Amount:", ethers.parseEther(ethAmount));
 
         // 1. 调用 tryBuy 获取预期输出
-        const readOnlyContract = new ethers.Contract(CONTRACT_CONFIG.FACTORY_CONTRACT, contractABI, provider);
+        const readOnlyContract = new ethers.Contract(CONTRACT_CONFIG.TokenManager, contractABI, provider);
         const result = await readOnlyContract.tryBuy(tokenAddress, ethers.parseEther(ethAmount));
 
         console.log("tryBuy 返回值:", result);
@@ -59,7 +59,7 @@ export const useTokenTrading = () => {
         const tokenAmountOut = result[0];
         const slippageMultiplier = Math.floor(getSlippageMultiplier() * 100);
         const minAmountOut = (tokenAmountOut * BigInt(slippageMultiplier)) / BigInt(100);
-        
+
         console.log(`使用滑点: ${slippage}%`);
 
         console.log("调用 buyToken 参数:");
@@ -68,7 +68,7 @@ export const useTokenTrading = () => {
         console.log(`MinAmountOut (with ${slippage}% slippage):`, minAmountOut.toString());
 
         // 3. 执行买入交易
-        const contract = new ethers.Contract(CONTRACT_CONFIG.FACTORY_CONTRACT, contractABI, signer);
+        const contract = new ethers.Contract(CONTRACT_CONFIG.TokenManager, contractABI, signer);
 
         console.log("发送 buyToken 交易...");
 
@@ -164,7 +164,7 @@ export const useTokenTrading = () => {
         }
 
         // 2. 调用 trySell 获取预期输出
-        const readOnlyContract = new ethers.Contract(CONTRACT_CONFIG.FACTORY_CONTRACT, contractABI, provider);
+        const readOnlyContract = new ethers.Contract(CONTRACT_CONFIG.TokenManager, contractABI, provider);
         const sellResult = await readOnlyContract.trySell(tokenAddress, sellAmount);
 
         console.log("trySell 返回值:", sellResult);
@@ -179,8 +179,8 @@ export const useTokenTrading = () => {
         console.log(`MinEthOut (with ${slippage}% slippage):`, minEthOut.toString());
 
         // 4. 检查和执行授权
-        const factoryContract = new ethers.Contract(CONTRACT_CONFIG.FACTORY_CONTRACT, contractABI, signer);
-        const allowance = await tokenContract.allowance(address, CONTRACT_CONFIG.FACTORY_CONTRACT);
+        const factoryContract = new ethers.Contract(CONTRACT_CONFIG.TokenManager, contractABI, signer);
+        const allowance = await tokenContract.allowance(address, CONTRACT_CONFIG.TokenManager);
 
         console.log("当前授权额度:", allowance.toString());
 
@@ -193,7 +193,7 @@ export const useTokenTrading = () => {
             let approveGasLimit;
             try {
                 const estimatedGas = await tokenContract.approve.estimateGas(
-                    CONTRACT_CONFIG.FACTORY_CONTRACT,
+                    CONTRACT_CONFIG.TokenManager,
                     ethers.MaxUint256 // 使用最大 uint256 进行无限授权
                 );
                 approveGasLimit = (estimatedGas * BigInt(120)) / BigInt(100); // +20% buffer
@@ -219,7 +219,7 @@ export const useTokenTrading = () => {
             }
 
             const approveResult = await tokenContract.approve(
-                CONTRACT_CONFIG.FACTORY_CONTRACT,
+                CONTRACT_CONFIG.TokenManager,
                 ethers.MaxUint256, // 无限授权
                 approveTxOptions
             );

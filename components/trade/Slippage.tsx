@@ -41,7 +41,7 @@ export default function Slippage({ isOpen = false, onOpenChange }: SlippageProps
             onOpenChange={onOpenChange ?? (() => { })}
             maxVH={70}
             size="md"
-            title="設定"
+            title="Setting"
         >
             <div className="text-base text-[#101010] pb-[5px]">
                 Slippage Tolerance
@@ -73,7 +73,7 @@ export default function Slippage({ isOpen = false, onOpenChange }: SlippageProps
                         input: "text-[14px] text-[#101010] placeholder:text-[#999] text-center",
                     }}
                     labelPlacement="outside"
-                    placeholder="自訂滑點"
+                    placeholder="0"
                     variant="bordered"
                     value={customSlippage}
                     onChange={(e) => {
@@ -104,26 +104,26 @@ export default function Slippage({ isOpen = false, onOpenChange }: SlippageProps
                             // 使用自定义滑点
                             const customValue = parseFloat(customSlippage);
                             if (isNaN(customValue) || customValue <= 0) {
-                                toast.error('請輸入有效的滑點數值', { icon: null });
+                                toast.error('Please enter a valid slippage value', { icon: null });
                                 return;
                             }
                             if (customValue > 50) {
-                                toast.error('滑點不能超過50%', { icon: null });
+                                toast.error('Slippage cannot exceed 50%', { icon: null });
                                 return;
                             }
                             newSlippage = customValue;
                         } else {
-                            toast.error('請選擇或輸入滑點數值', { icon: null });
+                            toast.error('Please select or enter the slippage value', { icon: null });
                             return;
                         }
 
                         // 保存滑点设置到store
                         setSlippage(newSlippage);
-                        toast.success(`滑點已設定為 ${newSlippage}%`, { icon: null });
+                        toast.success(`Slippage is set to ${newSlippage}%`, { icon: null });
                         onOpenChange?.(false);
                     }}
                 >
-                    確認
+                    Confirm
                 </Button>
             </div>
         </ResponsiveDialog>

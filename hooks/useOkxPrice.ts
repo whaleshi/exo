@@ -29,21 +29,17 @@ interface UseOkxPriceOptions {
 }
 
 export default function useOkxPrice(options: UseOkxPriceOptions = {}) {
-    const {
-        instId = "OKB-USDT",
-        refetchInterval = 10000,
-        enabled = true
-    } = options;
+    const { instId = "XPL-USDT", refetchInterval = 10000, enabled = true } = options;
 
     const { data, isLoading, error, isError } = useQuery<OkxTickerResponse>({
-        queryKey: ['okxPrice', instId],
+        queryKey: ["okxPrice", instId],
         queryFn: async () => {
             const response = await fetch(`https://www.okx.com/api/v5/market/ticker?instId=${instId}`, {
-                method: 'GET',
+                method: "GET",
                 headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                }
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
             });
 
             if (!response.ok) {
@@ -53,7 +49,7 @@ export default function useOkxPrice(options: UseOkxPriceOptions = {}) {
             const data = await response.json();
 
             if (data.code !== "0") {
-                throw new Error(data.msg || 'Failed to fetch price data');
+                throw new Error(data.msg || "Failed to fetch price data");
             }
 
             return data;
@@ -62,8 +58,8 @@ export default function useOkxPrice(options: UseOkxPriceOptions = {}) {
         enabled,
         staleTime: 5000,
         retry: 3,
-        retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
-        networkMode: 'online',
+        retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+        networkMode: "online",
         refetchOnWindowFocus: false,
         refetchOnReconnect: true,
     });
@@ -74,8 +70,10 @@ export default function useOkxPrice(options: UseOkxPriceOptions = {}) {
         data,
         ticker,
         price: ticker?.last ? parseFloat(ticker.last) : null,
-        change24h: ticker?.open24h && ticker?.last ? 
-            ((parseFloat(ticker.last) - parseFloat(ticker.open24h)) / parseFloat(ticker.open24h) * 100) : null,
+        change24h:
+            ticker?.open24h && ticker?.last
+                ? ((parseFloat(ticker.last) - parseFloat(ticker.open24h)) / parseFloat(ticker.open24h)) * 100
+                : null,
         volume24h: ticker?.vol24h ? parseFloat(ticker.vol24h) : null,
         high24h: ticker?.high24h ? parseFloat(ticker.high24h) : null,
         low24h: ticker?.low24h ? parseFloat(ticker.low24h) : null,

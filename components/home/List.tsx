@@ -6,7 +6,7 @@ import _bignumber from "bignumber.js";
 import Link from "next/link";
 import { ethers } from "ethers";
 import { CONTRACT_CONFIG, DEFAULT_CHAIN_CONFIG, MULTICALL3_ADDRESS, MULTICALL3_ABI } from "@/config/chains";
-import FactoryABI from "@/constant/abi.json";
+import FactoryABI from "@/constant/TokenManager.abi.json";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import useOkxPrice from "@/hooks/useOkxPrice";
@@ -19,9 +19,9 @@ const List = () => {
     const [isSearchExpanded, setIsSearchExpanded] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const tabs = [
-        { id: 0, label: "新建" },
-        { id: 1, label: "狂飆" },
-        { id: 2, label: "開盤" },
+        { id: 0, label: "Newly" },
+        { id: 1, label: "Soaring" },
+        { id: 2, label: "Launched" },
     ];
 
     const [page, setPage] = useState(0);
@@ -193,7 +193,7 @@ const List = () => {
         queryKey: ['tokenContractData'],
         queryFn: async () => {
             const provider = new ethers.JsonRpcProvider(DEFAULT_CHAIN_CONFIG.rpcUrl);
-            const factoryContract = new ethers.Contract(CONTRACT_CONFIG.FACTORY_CONTRACT, FactoryABI, provider);
+            const factoryContract = new ethers.Contract(CONTRACT_CONFIG.TokenManager, FactoryABI, provider);
             const factoryInterface = new ethers.Interface(FactoryABI);
 
             console.log('Calling allTokens method...');
@@ -213,7 +213,7 @@ const List = () => {
             const addressCalls = [];
             for (let i = 0; i < tokenCount; i++) {
                 addressCalls.push({
-                    target: CONTRACT_CONFIG.FACTORY_CONTRACT,
+                    target: CONTRACT_CONFIG.TokenManager,
                     allowFailure: true,
                     callData: factoryInterface.encodeFunctionData("tokens", [i]),
                 });
@@ -256,13 +256,13 @@ const List = () => {
             for (const address of validAddresses) {
                 // URI 调用
                 dataCalls.push({
-                    target: CONTRACT_CONFIG.FACTORY_CONTRACT,
+                    target: CONTRACT_CONFIG.TokenManager,
                     allowFailure: true,
                     callData: factoryInterface.encodeFunctionData("uri", [address]),
                 });
                 // tokensInfo 调用
                 dataCalls.push({
-                    target: CONTRACT_CONFIG.FACTORY_CONTRACT,
+                    target: CONTRACT_CONFIG.TokenManager,
                     allowFailure: true,
                     callData: factoryInterface.encodeFunctionData("tokensInfo", [address]),
                 });
@@ -422,7 +422,7 @@ const List = () => {
                     className="h-[32px] px-[12px] flex items-center gap-[4px] cursor-pointer bg-[#F8F8F8] text-[#101010] text-[13px]"
                     onClick={() => router.push('/search')}
                 >
-                    搜尋
+                    Search
                 </div>
             </div>
             {(() => {
@@ -475,7 +475,7 @@ const List = () => {
                                 </div>
                                 <div>
                                     <span className="text-[11px] font-medium text-[rgba(170,170,170,1)]">
-                                        戰壕市值{" "}
+                                        MC{" "}
                                         <i className="not-italic text-[11px]  font-medium text-[#101010]">
                                             ${_bignumber(item?.info?.lastPrice ?? 0).div(1e18).times(1300000000).times(price ?? 0).dp(2).toString() || '--'}
                                         </i>
@@ -518,7 +518,7 @@ const List = () => {
                                 }}
                             />
                             <div className="text-[#999] mt-[16px] text-[14px]">
-                                {searchQuery ? '未找到匹配的戰壕' : '戰壕空空'}
+                                {searchQuery ? 'Nothing Here' : 'Nothing Here'}
                             </div>
                         </div>
                     );

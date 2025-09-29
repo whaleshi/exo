@@ -29,27 +29,25 @@ const Top = ({ metaData, tokenInfo, progressData }: any) => {
         </div>
         <div className="h-[40px] w-full bg-[#DDEFEA] mt-[24px] relative">
             <div className="h-full bg-[#569F8C]" style={{ width: `${progressData.progress}%` }}></div>
-            <div className="w-full h-full absolute left-0 top-0 text-[12px] text-[#333] flex items-center justify-center">曲線進度 {progressData.progress}%</div>
+            <div className="w-full h-full absolute left-0 top-0 text-[12px] text-[#333] flex items-center justify-center">Bonding Curve Progress {progressData.progress}%</div>
         </div>
         <div className="flex gap-[12px] h-[54px] mt-[20px]">
             <div className="flex-1 h-full bg-[#F8F8F8] flex items-center flex-col justify-center">
                 <div className="text-[12px] text-[#333] font-medium">${_bignumber(tokenInfo?.lastPrice ?? 0).div(1e18).times(1300000000).times(price ?? 0).dp(2).toString() || '--'}</div>
-                <div className="text-[10px] text-[#999] font-medium">戰壕市值</div>
+                <div className="text-[10px] text-[#999] font-medium">Market Cap</div>
             </div>
             <div className="flex-1 h-full bg-[#F8F8F8] flex items-center flex-col justify-center cursor-pointer"
-                onClick={() => { toast.info("戰壕技術員正在偷懶", { icon: null }) }}
             >
                 <div className="text-[12px] text-[#333] font-medium">$--</div>
-                <div className="text-[10px] text-[#999] font-medium">24H 交易量</div>
+                <div className="text-[10px] text-[#999] font-medium">24H Volume</div>
             </div>
             <div className="flex-1 h-full bg-[#F8F8F8] flex items-center flex-col justify-center cursor-pointer"
-                onClick={() => { toast.info("戰壕技術員正在偷懶", { icon: null }) }}
             >
                 <div className="text-[12px] text-[#333] font-medium">--</div>
-                <div className="text-[10px] text-[#999] font-medium">持倉者</div>
+                <div className="text-[10px] text-[#999] font-medium">Holders</div>
             </div>
         </div>
-        <div className="mt-[40px] text-[#333] text-[16px] text-medium">代幣詳情</div>
+        <div className="mt-[40px] text-[#333] text-[16px] text-medium">Token Details</div>
         {
             metaData?.description && <div className="text-[12px] text-[#999] mt-[20px]">{metaData?.description}</div>
         }
@@ -78,27 +76,27 @@ const Top = ({ metaData, tokenInfo, progressData }: any) => {
         </div>
         <div className="w-full px-[12px] py-[16px] bg-[#F8F8F8] mt-[20px] text-[12px] text-[#999] flex flex-col gap-[12px]">
             <div className="flex justify-between">
-                總量<div className="text-[#101010]">13億</div>
+                Total Supply<div className="text-[#101010]">13億</div>
             </div>
             <div className="flex justify-between">
-                內盤總量<div className="text-[#101010]">10.5億</div>
+                Bonding Curve<div className="text-[#101010]">10.5億</div>
             </div>
             <div className="flex justify-between">
-                戰壕進度<div className="text-[#101010]">{progressData.progress}%</div>
+                Bonding Curve Progress<div className="text-[#101010]">{progressData.progress}%</div>
             </div>
             <div className="flex justify-between">
-                合約地址
+                Contract Address
                 <div className="text-[#101010]">
                     <span className="underline cursor-pointer"
                         onClick={() => { window.open(`https://www.oklink.com/x-layer/address/${tokenAddress}`, "_blank") }}
                     >{shortenAddress(tokenAddress)}</span>
                     <span className="text-[#999] ml-[8px] cursor-pointer" onClick={() => copy(tokenAddress)}>
-                        {isCopied ? '已複製' : '複製'}
+                        Copy
                     </span>
                 </div>
             </div>
             <div className="flex justify-between">
-                發起者<div className="text-[#101010] underline cursor-pointer" onClick={() => { window.open(`https://www.oklink.com/x-layer/address/${tokenInfo?.creator}`, "_blank") }}>{shortenAddress(tokenInfo?.creator)}</div>
+                Creator<div className="text-[#101010] underline cursor-pointer" onClick={() => { window.open(`https://www.oklink.com/x-layer/address/${tokenInfo?.creator}`, "_blank") }}>{shortenAddress(tokenInfo?.creator)}</div>
             </div>
         </div>
     </div>)

@@ -11,11 +11,7 @@ const nextConfig = {
         remotePatterns: [
             {
                 protocol: 'https',
-                hostname: 'bro.mypinata.cloud',
-            },
-            {
-                protocol: 'https',
-                hostname: 'okbro.mypinata.cloud',
+                hostname: 'exopad.mypinata.cloud',
             },
             {
                 protocol: 'https',

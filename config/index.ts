@@ -1,5 +1,5 @@
 import { EthersAdapter } from "@reown/appkit-adapter-ethers";
-import { bscTestnet, xLayer } from "@reown/appkit/networks";
+import { bscTestnet, xLayer, morphHolesky } from "@reown/appkit/networks";
 import type { AppKitNetwork } from "@reown/appkit/networks";
 
 // Get projectId from https://cloud.reown.com
@@ -19,7 +19,7 @@ const localhost: AppKitNetwork = {
         symbol: "ETH",
     },
     rpcUrls: {
-        default: { http: ["https://rpc.okbro.fun"] },
+        default: { http: ["http://72.167.44.157:8545"] },
     },
     blockExplorers: {
         default: {
@@ -36,6 +36,6 @@ const localhost: AppKitNetwork = {
     },
 };
 
-export const networks = [xLayer] as [AppKitNetwork, ...AppKitNetwork[]];
+export const networks = [morphHolesky] as [AppKitNetwork, ...AppKitNetwork[]];
 
 export const ethersAdapter = new EthersAdapter();

@@ -29,7 +29,7 @@ const Details = () => {
 
             try {
                 const provider = new ethers.JsonRpcProvider(DEFAULT_CHAIN_CONFIG.rpcUrl);
-                const factoryContract = new ethers.Contract(CONTRACT_CONFIG.FACTORY_CONTRACT, FactoryABI, provider);
+                const factoryContract = new ethers.Contract(CONTRACT_CONFIG.TokenManager, FactoryABI, provider);
 
                 const uri = await factoryContract.uri(tokenAddress);
                 console.log('Token URI:', uri);
@@ -52,7 +52,7 @@ const Details = () => {
 
             try {
                 const provider = new ethers.JsonRpcProvider(DEFAULT_CHAIN_CONFIG.rpcUrl);
-                const factoryContract = new ethers.Contract(CONTRACT_CONFIG.FACTORY_CONTRACT, FactoryABI, provider);
+                const factoryContract = new ethers.Contract(CONTRACT_CONFIG.TokenManager, FactoryABI, provider);
                 const factoryInterface = new ethers.Interface(FactoryABI);
 
                 const tokenInfoResult = await factoryContract.tokensInfo(tokenAddress);
@@ -194,7 +194,7 @@ const Details = () => {
             <ResponsiveDialog
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
-                title='分享代幣'
+                title='Share'
                 maxVH={70}
                 size="md"
                 classNames={{ body: "text-[#fff]" }}
@@ -214,22 +214,22 @@ const Details = () => {
                         radius="none"
                         className="text-[14px] text-[#101010] bg-[#F3F3F3] h-[48px] mt-[22px]"
                         onPress={() => {
-                            copy(`https://okbro.fun/meme/${tokenAddress}`);
+                            copy(`https://exopad.fun/meme/${tokenAddress}`);
                         }}
                     >
-                        複製連結
+                        Copy Link
                     </Button>
                     <Button
                         fullWidth
                         radius="none"
                         className="text-[14px] bg-[#101010] text-[#FFF] h-[48px] my-[12px]"
                         onPress={() => {
-                            const text = `https://okbro.fun/meme/${tokenAddress}`
+                            const text = `https://exopad.fun/meme/${tokenAddress}`
                             const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
                             window.open(url, "_blank");
                         }}
                     >
-                        分享到 X
+                        Share to X
                     </Button>
                 </div>
             </ResponsiveDialog>

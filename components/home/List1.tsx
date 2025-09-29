@@ -188,7 +188,7 @@ const List = () => {
         queryKey: ['tokenContractData', page, ITEMS_PER_PAGE],
         queryFn: async () => {
             const provider = new ethers.JsonRpcProvider(DEFAULT_CHAIN_CONFIG.rpcUrl);
-            const factoryContract = new ethers.Contract(CONTRACT_CONFIG.FACTORY_CONTRACT, FactoryABI, provider);
+            const factoryContract = new ethers.Contract(CONTRACT_CONFIG.TokenManager, FactoryABI, provider);
             const factoryInterface = new ethers.Interface(FactoryABI);
 
             console.log('Calling allTokens method...');
@@ -211,7 +211,7 @@ const List = () => {
             const addressCalls = [];
             for (let i = startIndex; i < endIndex; i++) {
                 addressCalls.push({
-                    target: CONTRACT_CONFIG.FACTORY_CONTRACT,
+                    target: CONTRACT_CONFIG.TokenManager,
                     allowFailure: true,
                     callData: factoryInterface.encodeFunctionData("tokens", [i]),
                 });
@@ -254,13 +254,13 @@ const List = () => {
             for (const address of validAddresses) {
                 // URI 调用
                 dataCalls.push({
-                    target: CONTRACT_CONFIG.FACTORY_CONTRACT,
+                    target: CONTRACT_CONFIG.TokenManager,
                     allowFailure: true,
                     callData: factoryInterface.encodeFunctionData("uri", [address]),
                 });
                 // tokensInfo 调用
                 dataCalls.push({
-                    target: CONTRACT_CONFIG.FACTORY_CONTRACT,
+                    target: CONTRACT_CONFIG.TokenManager,
                     allowFailure: true,
                     callData: factoryInterface.encodeFunctionData("tokensInfo", [address]),
                 });
@@ -526,7 +526,7 @@ const List = () => {
                                 }}
                             />
                             <div className="text-[#999] mt-[16px] text-[14px]">
-                                {searchQuery ? '未找到匹配的戰壕' : '戰壕空空'}
+                                {searchQuery ? 'Nothing Here' : 'Nothing Here'}
                             </div>
                         </div>
                     );

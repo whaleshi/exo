@@ -1,10 +1,11 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-    name: "OKBRO.FUN",
-    description: "okbro.fun 是建造在 X Layer 上的代幣發射台。最初由社區發起，致力於打造兄弟戰壕。",
+    name: "EXOPAD",
+    description: "",
     links: {
-        tg: "https://t.me/okbrodotfun",
-        x: "https://x.com/okbrodotfun",
+        tg: "https://t.me/exopadfun",
+        x: "https://x.com/ExoPadFun",
+        work: "https://x.com/ExoPadFun/status/1972326413987676279",
     },
 };

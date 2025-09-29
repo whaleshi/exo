@@ -41,6 +41,7 @@ export const Navbar = () => {
             try {
                 const provider = new ethers.JsonRpcProvider(DEFAULT_CHAIN_CONFIG.rpcUrl);
                 const balance = await provider.getBalance(address);
+                console.log(balance)
                 // 返回格式化的余额（18位小数）
                 return ethers.formatEther(balance);
             } catch (error) {
@@ -133,9 +134,9 @@ export const Navbar = () => {
                     {
                         type === 2 && <>
                             <div className="flex flex-col items-start w-full gap-[20px] mt-[10px]">
-                                <Link className="text-[24px] text-[#fff]" isExternal aria-label="x" href={siteConfig.links.x}>$EXO Airdrop</Link>
-                                <Link className="text-[24px] text-[#fff]" isExternal aria-label="x" href={siteConfig.links.x}>Launch a token</Link>
-                                <Link className="text-[24px] text-[#fff]" isExternal aria-label="x" href={siteConfig.links.x}>How it works?</Link>
+                                <Link className="text-[24px] text-[#fff]" href="/airdrop" onPress={() => setIsMenuOpen(false)}>$EXO Airdrop</Link>
+                                <Link className="text-[24px] text-[#fff]" href="/create" onPress={() => setIsMenuOpen(false)}>Launch a token</Link>
+                                <Link className="text-[24px] text-[#fff]" isExternal aria-label="x" href={siteConfig.links.work}>How it works?</Link>
                                 <Link className="text-[24px] text-[#fff]" isExternal aria-label="x" href={siteConfig.links.x}>Follow us on X</Link>
                                 <Link className="text-[24px] text-[#fff]" isExternal aria-label="x" href={siteConfig.links.x}>Join Community</Link>
                                 <Button

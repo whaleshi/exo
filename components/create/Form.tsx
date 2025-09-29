@@ -6,7 +6,7 @@ import pinFileToIPFS from "@/utils/pinata";
 import { toast } from "sonner";
 import { ethers } from "ethers";
 import { useAppKit, useAppKitAccount, useAppKitProvider } from "@reown/appkit/react";
-import FactoryABIData from "@/constant/abi.json";
+import FactoryABIData from "@/constant/TokenManager.abi.json";
 const FactoryABI = FactoryABIData;
 import { CONTRACT_CONFIG, DEFAULT_CHAIN_CONFIG } from "@/config/chains";
 import { randomBytes } from "crypto";
@@ -98,7 +98,7 @@ function AvatarField({
                     htmlFor={inputId}
                     className={["text-[14px] text-[#666] font-normal", errorText && "text-[#f31260]"].join(" ")}
                 >
-                    圖標
+                    Icon
                     {required ? <span className="text-[#f31260] ml-[2px]">*</span> : null}
                 </label>
             </div>
@@ -165,7 +165,7 @@ export default function CreateForm() {
     const [telegramVal, setTelegramVal] = useState("");
     const [preBuyVal, setPreBuyVal] = useState("");
     const [createdTokenAddress, setCreatedTokenAddress] = useState<string | null>("");
-    const factoryAddr = CONTRACT_CONFIG.FACTORY_CONTRACT;
+    const factoryAddr = CONTRACT_CONFIG.TokenManager;
 
 
 
@@ -265,7 +265,9 @@ export default function CreateForm() {
             }
 
             // 创建provider和signer
+            console.log(DEFAULT_CHAIN_CONFIG.rpcUrl)
             const provider = new ethers.JsonRpcProvider(DEFAULT_CHAIN_CONFIG.rpcUrl);
+
 
             // 确保 walletProvider 是有效的 EIP-1193 provider
             if (!walletProvider || typeof (walletProvider as any).request !== 'function') {
@@ -277,12 +279,12 @@ export default function CreateForm() {
 
             console.log("使用地址:", address);
 
-            // 检查余额
-            const balance = await ethersProvider.getBalance(address);
+            // 检查余额 - 使用JsonRpcProvider确保连接正确的网络
+            const balance = await provider.getBalance(address);
             console.log("账户余额:", ethers.formatEther(balance), "ETH");
 
             if (balance === BigInt(0)) {
-                toast.error('帳戶餘額不足', { icon: null });
+                toast.error('Insufficient balance', { icon: null });
                 return null;
             }
 
@@ -317,7 +319,7 @@ export default function CreateForm() {
 
             // 统一交易选项
             const txOptions: any = {
-                type: 0, // 强制使用 Legacy 交易类型
+                // type: 0, // 强制使用 Legacy 交易类型
             };
             if (gasLimit) txOptions.gasLimit = gasLimit;
             if (newGasPrice) txOptions.gasPrice = newGasPrice;
@@ -325,7 +327,13 @@ export default function CreateForm() {
 
             let tx;
             try {
+                console.log("合约地址:", factoryAddr);
+                console.log("Signer address:", await signer.getAddress());
+                console.log("网络信息:", await ethersProvider.getNetwork());
+
                 if (hasPreBuy) {
+                    console.log("调用 createTokenAndBuy");
+                    console.log("参数:", { nameVal, ticker, metadataHash, salt, preBuyAmount: preBuyAmount.toString(), txOptions });
                     tx = await factoryContract.createTokenAndBuy(
                         nameVal,
                         ticker,
@@ -335,6 +343,8 @@ export default function CreateForm() {
                         txOptions
                     );
                 } else {
+                    console.log("调用 createToken");
+                    console.log("参数:", { nameVal, ticker, metadataHash, salt, txOptions });
                     tx = await factoryContract.createToken(
                         nameVal,
                         ticker,
@@ -343,7 +353,14 @@ export default function CreateForm() {
                         txOptions
                     );
                 }
+                console.log("交易已提交:", tx.hash);
             } catch (error: any) {
+                console.error("合约调用失败:", error);
+                console.error("错误消息:", error.message);
+                console.error("错误代码:", error.code);
+                if (error.data) {
+                    console.error("错误数据:", error.data);
+                }
                 throw error;
             }
 
@@ -378,7 +395,7 @@ export default function CreateForm() {
 
         // 检查是否有头像的 IPFS hash
         if (!ipfsHash) {
-            toast.error('圖標上傳失敗 請重試', { icon: null });
+            toast.error('Icon upload failed. Please try again.', { icon: null });
             return;
         }
 
@@ -400,11 +417,11 @@ export default function CreateForm() {
 
             setCreatedTokenAddress(tokenAddress as string);
             onOpen();
-            toast.success('鑄造成功', { icon: null });
+            toast.success('Created Successfully', { icon: null });
         } catch (error: any) {
             console.error("Create error:", error);
 
-            toast.error('鑄造失敗，請重試', { icon: null })
+            toast.error('Creation Failed, Please Retry', { icon: null })
         } finally {
             setCreateLoading(false);
         }
@@ -429,11 +446,11 @@ export default function CreateForm() {
                         input: "f600 text-[14px] text-[#101010] placeholder:text-[#999]",
                     }}
                     isRequired
-                    errorMessage='輸入名稱'
-                    label={<span className="text-[14px] text-[#666]">名稱</span>}
+                    errorMessage='Please Enter Name'
+                    label={<span className="text-[14px] text-[#666]">Name</span>}
                     labelPlacement="outside-top"
                     name="name"
-                    placeholder='輸入名稱'
+                    placeholder='Please Enter Name'
                     variant="bordered"
                     value={nameVal}
                     onChange={(e) => setNameVal(e.target.value)}
@@ -445,14 +462,14 @@ export default function CreateForm() {
                 <Input
                     classNames={{
                         inputWrapper: "h-[48px] border-[#F3F3F3]  border-1",
-                        input: "f600 text-[14px] text-[#101010] placeholder:text-[#999] uppercase tracking-[-0.07px]",
+                        input: "f600 text-[14px] text-[#101010] placeholder:text-[#999] tracking-[-0.07px]",
                     }}
                     isRequired
-                    errorMessage='輸入代號'
-                    label={<span className="text-[14px] text-[#666]">代號</span>}
+                    errorMessage='Please Enter Ticker'
+                    label={<span className="text-[14px] text-[#666]">Ticker</span>}
                     labelPlacement="outside-top"
                     name="ticker"
-                    placeholder="輸入代號"
+                    placeholder="Please Enter Ticker"
                     variant="bordered"
                     value={ticker}
                     onChange={(e) => setTicker(e.target.value.toUpperCase())}
@@ -469,15 +486,15 @@ export default function CreateForm() {
                     }}
                     label={
                         <div className="flex items-center">
-                            <span className="text-[14px] text-[#666]">簡介</span>
-                            <span className="text-[#999]">（可選）</span>
+                            <span className="text-[14px] text-[#666]">Description</span>
+                            <span className="text-[#999]">（Optional）</span>
                         </div>
                     }
                     labelPlacement="outside"
-                    placeholder="輸入簡介"
+                    placeholder="Please Enter Description"
                     variant="bordered"
                     name="description"
-                    aria-label="輸入簡介"
+                    aria-label="Please Enter Description"
                     value={descriptionVal}
                     onChange={(e) => setDescriptionVal(e.target.value)}
                     maxLength={200}
@@ -492,17 +509,17 @@ export default function CreateForm() {
                     }}
                     label={
                         <div className="flex items-center">
-                            <span className="text-[14px] text-[#666]">提前埋伏</span>
-                            <span className="text-[#999]">（可選）</span>
+                            <span className="text-[14px] text-[#666]">Early Buy</span>
+                            <span className="text-[#999]">（Optional）</span>
                         </div>
                     }
                     labelPlacement="outside-top"
                     name="preBuy"
-                    placeholder="最大 1 OKB"
+                    placeholder="Please Enter Amount"
                     variant="bordered"
                     type="text"
                     inputMode="decimal"
-                    aria-label="提前埋伏"
+                    aria-label="Early Buy"
                     value={preBuyVal}
                     onChange={(e) => {
                         const value = e.target.value;
@@ -510,9 +527,7 @@ export default function CreateForm() {
                         if (value === '' || /^\d*\.?\d*$/.test(value)) {
                             const numValue = parseFloat(value);
                             // 限制最大值为1，NaN表示空字符串或无效输入
-                            if (value === '' || (!isNaN(numValue) && numValue <= 1)) {
-                                setPreBuyVal(value);
-                            }
+                            setPreBuyVal(value);
                         }
                     }}
                     onKeyDown={(e) => {
@@ -523,7 +538,7 @@ export default function CreateForm() {
                     }}
                     radius="none"
                     endContent={
-                        <span className="text-[14px] font-medium text-[#101010]">OKB</span>
+                        <span className="text-[14px] font-medium text-[#101010]">XPL</span>
                     }
                 />
                 {/* 社交链接 */}
@@ -534,16 +549,16 @@ export default function CreateForm() {
                     }}
                     label={
                         <div className="flex items-center">
-                            <span className="text-[14px] text-[#666]">網站</span>
-                            <span className="text-[#999]">（可選）</span>
+                            <span className="text-[14px] text-[#666]">Website</span>
+                            <span className="text-[#999]">（Optional）</span>
                         </div>
                     }
                     labelPlacement="outside-top"
                     name="website"
-                    placeholder="輸入網站"
+                    placeholder="Please Enter Website"
                     variant="bordered"
                     type="url"
-                    aria-label="輸入網站"
+                    aria-label="Please Enter Website"
                     value={websiteVal}
                     onChange={(e) => setWebsiteVal(e.target.value)}
                     radius="none"
@@ -556,15 +571,15 @@ export default function CreateForm() {
                     label={
                         <div className="flex items-center">
                             <span className="text-[14px] text-[#666]">X</span>
-                            <span className="text-[#999]">（可選）</span>
+                            <span className="text-[#999]">（Optional）</span>
                         </div>
                     }
                     labelPlacement="outside-top"
                     name="x"
-                    placeholder="輸入 X"
+                    placeholder="Please Enter X"
                     variant="bordered"
                     type="url"
-                    aria-label="輸入 X"
+                    aria-label="Please Enter X"
                     value={xVal}
                     onChange={(e) => setXVal(e.target.value)}
                     radius="none"
@@ -576,16 +591,16 @@ export default function CreateForm() {
                     }}
                     label={
                         <div className="flex items-center">
-                            <span className="text-[14px] text-[#666]">電報</span>
-                            <span className="text-[#999]">（可選）</span>
+                            <span className="text-[14px] text-[#666]">Telegram</span>
+                            <span className="text-[#999]">（Optional）</span>
                         </div>
                     }
                     labelPlacement="outside-top"
                     name="telegram"
-                    placeholder='輸入電報'
+                    placeholder='Please Enter Telegram'
                     variant="bordered"
                     type="url"
-                    aria-label='輸入電報'
+                    aria-label='Please Enter Telegram'
                     value={telegramVal}
                     onChange={(e) => setTelegramVal(e.target.value)}
                     radius="none"
@@ -601,14 +616,14 @@ export default function CreateForm() {
                     disabled={createLoading || !readyToSubmit}
                     radius="none"
                 >
-                    {!isConnected ? "連接戰壕" : "立即開戰壕"}
+                    {!isConnected ? "Connect Wallet" : "Create Now"}
                 </Button>
                 {/* <div className="" onClick={() => { onOpen() }}>1</div> */}
             </Form>
             <ResponsiveDialog
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
-                title='鑄造成功'
+                title='Created Successfully'
                 maxVH={70}
                 size="md"
                 classNames={{ body: "text-[#fff]" }}
@@ -633,7 +648,7 @@ export default function CreateForm() {
                             }
                         }}
                     >
-                        查看詳情
+                        View Details
                     </Button>
                     <Button
                         fullWidth
@@ -645,7 +660,7 @@ export default function CreateForm() {
                             window.open(url, "_blank");
                         }}
                     >
-                        分享到 X
+                        Share to X
                     </Button>
                 </div>
             </ResponsiveDialog>

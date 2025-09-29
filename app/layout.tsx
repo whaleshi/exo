@@ -27,7 +27,7 @@ export const metadata: Metadata = {
         siteName: siteConfig.name,
         images: [
             {
-                url: "https://bro.mypinata.cloud/ipfs/bafybeibafpafs5aewxnrrd4kbu4yc6cr4wjcfc2fdojkkxy4bogfgl4vua",
+                url: "",
                 width: 1200,
                 height: 630,
                 alt: siteConfig.name,
@@ -39,11 +39,11 @@ export const metadata: Metadata = {
         title: siteConfig.name,
         description: siteConfig.description,
         images: [
-            "https://bro.mypinata.cloud/ipfs/bafybeibafpafs5aewxnrrd4kbu4yc6cr4wjcfc2fdojkkxy4bogfgl4vua",
+            "",
         ],
         // 合理默认：官方账号同名
-        site: "@okbrodotfun",
-        creator: "@okbrodotfun",
+        site: "@ExoPadFun",
+        creator: "@ExoPadFun",
     },
 };
 
