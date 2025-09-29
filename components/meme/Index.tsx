@@ -224,7 +224,7 @@ const Details = () => {
                         radius="none"
                         className="text-[14px] bg-[#101010] text-[#FFF] h-[48px] my-[12px]"
                         onPress={() => {
-                            const text = `https://exopad.fun/meme/${tokenAddress}`
+                            const text = `I found $${tokenMetadata?.symbol} on @ExoPadFun, come trade together 🪐 Link https://exopad.fun/meme/${tokenAddress}`
                             const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
                             window.open(url, "_blank");
                         }}

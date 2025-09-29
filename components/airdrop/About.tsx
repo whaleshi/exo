@@ -13,16 +13,16 @@ const AirAbout = () => {
             </div>
             <div className="bg-[#F8F8F8] py-[16px] px-[12px] mt-[16px]">
                 <div className="flex justify-between text-[12px] text-[#999] mb-[12px]">
-                    <span>Total Supply</span><span className="text-[#101010] font-medium">10B</span>
+                    <span>Total Supply</span><span className="text-[#101010] font-medium">1B</span>
                 </div>
                 <div className="flex justify-between text-[12px] text-[#999] mb-[12px]">
-                    <span>Community Airdrop</span><span className="text-[#101010] font-medium">5B</span>
+                    <span>Community Airdrop</span><span className="text-[#101010] font-medium">500M</span>
                 </div>
                 <div className="flex justify-between text-[12px] text-[#999] mb-[12px]">
-                    <span>pEXO Redemption Pool - 1 Year Linear Unlock</span><span className="text-[#101010] font-medium">2B</span>
+                    <span>pEXO Redemption Pool - 1 Year Linear Unlock</span><span className="text-[#101010] font-medium">200M</span>
                 </div>
                 <div className="flex justify-between text-[12px] text-[#999] mb-[12px]">
-                    <span>IDO - Immediate Unlock</span><span className="text-[#101010] font-medium">1B</span>
+                    <span>IDO - Immediate Unlock</span><span className="text-[#101010] font-medium">100M</span>
                 </div>
                 <div className="flex justify-between text-[12px] text-[#999] mb-[12px]">
                     <span>CEX</span><span className="text-[#101010] font-medium">80M</span>
@@ -31,7 +31,7 @@ const AirAbout = () => {
                     <span>Liquidity</span><span className="text-[#101010] font-medium">20M</span>
                 </div>
                 <div className="flex justify-between text-[12px] text-[#999]">
-                    <span>Team - 1 Year Linear Unlock</span><span className="text-[#101010] font-medium">20M</span>
+                    <span>Team - 1 Year Linear Unlock</span><span className="text-[#101010] font-medium">100M</span>
                 </div>
             </div>
             <button className="w-full h-[48px] bg-[#A3C6B8] text-[#FFF] text-[12px] font-medium rounded-none mt-[20px]">EXO IDO Coming Soon</button>

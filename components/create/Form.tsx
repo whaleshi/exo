@@ -655,7 +655,7 @@ export default function CreateForm() {
                         radius="none"
                         className="text-[14px] bg-[#101010] text-[#FFF] h-[48px] my-[12px]"
                         onPress={() => {
-                            const text = ``
+                            const text = `I found $${ticker} on @ExoPadFun, come trade together 🪐 Link`
                             const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
                             window.open(url, "_blank");
                         }}

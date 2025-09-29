@@ -211,10 +211,10 @@ export const getCurrentChainConfig = () => ({
 // 合约地址配置
 export const CONTRACT_CONFIG = {
     // 工厂合约地址 - 用于创建新代币
-    // TokenManager: "0x4787F0c2cF30868579E32cD4e9B461D5aEef8190" as const,
-    // pEXOAirdrop: "0x3402978bF3139403843BBF44234b861c8B861b6F" as const,
-    TokenManager: "0x542B50C391DC143F12B538093D24d14c585909DF" as const,
-    pEXOAirdrop: "0x929D6684Bf29502b195ba993a2298A9b9afb09F6" as const,
+    TokenManager: "0x4787F0c2cF30868579E32cD4e9B461D5aEef8190" as const,
+    pEXOAirdrop: "0x3402978bF3139403843BBF44234b861c8B861b6F" as const,
+    // TokenManager: "0x542B50C391DC143F12B538093D24d14c585909DF" as const,
+    // pEXOAirdrop: "0x929D6684Bf29502b195ba993a2298A9b9afb09F6" as const,
 } as const;
 
 // Multicall3 合约地址 (通用地址，大多数链都支持)
