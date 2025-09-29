@@ -134,7 +134,7 @@ const Trade = ({ metaData, progressData }: any) => {
 
     return <div className="pb-[30px]">
         {
-            progressData.progress != 100 ? <>
+            progressData.progress > 100 ? <>
                 <TradePopup
                     isOpen={isTradePopupOpen}
                     onOpenChange={setIsTradePopupOpen}
@@ -189,25 +189,24 @@ const Trade = ({ metaData, progressData }: any) => {
                     </Button>
                 </div>
             </> : <>
-                {
-                    tokenAddress === '0x52753aD98Ef04DD9a533907fd96DD0a283095a4C' ? <Button
-                        radius="none"
-                        className="w-full h-[48px] bg-[#569F8C] border-[#569F8C] border-1 text-[14px] text-[#FFF]"
-                        onPress={() => {
-                            window.open(`https://dapp.quickswap.exchange/swap/v3/ETH/${tokenAddress}?chainId=196`, "_blank");
-                        }}
-                    >
-                        去 QuickSwap 開幹
-                    </Button> : <Button
-                        radius="none"
-                        className="w-full h-[48px] bg-[#569F8C] border-[#569F8C] border-1 text-[14px] text-[#FFF]"
-                        onPress={() => {
-                            window.open(`https://potatoswap.finance/swap?outputCurrency=${tokenAddress}`, "_blank");
-                        }}
-                    >
-                        去 PotatoSwap 開幹
-                    </Button>
-                }
+                <Button
+                    radius="none"
+                    className="w-full h-[48px] bg-[#F8F8F8] border-[#F8F8F8] border-1 text-[14px] text-[#101010]"
+                    onPress={() => {
+                        window.open(`https://app.uniswap.org/swap`, "_blank");
+                    }}
+                >
+                    去 Uniswap 交易
+                </Button>
+                <Button
+                    radius="none"
+                    className="w-full h-[48px] mt-[10px] bg-[#569F8C] border-[#569F8C] border-1 text-[14px] text-[#FFF]"
+                    onPress={() => {
+                        window.open(`https://www.defined.fi/tokens/discover?network=plasma`, "_blank");
+                    }}
+                >
+                    去 Defined.fi 交易
+                </Button>
             </>
         }
 

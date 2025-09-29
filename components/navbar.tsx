@@ -145,7 +145,7 @@ export const Navbar = () => {
                                     radius="none"
                                     className="h-[48px] text-sm font-normal text-[#333] bg-[#fff] border-1 border-[#F3F3F3] text-[14px]"
                                     variant="flat"
-                                    onPress={() => { window.open("https://x.com/XPLrodotfun/status/1962110458611249274?s=46&t=sKCMgE2u8cDlKJdlNM2zWQ", "_blank") }}
+                                    onPress={() => { window.open("", "_blank") }}
                                 >
                                     Buy $XPL
                                 </Button>

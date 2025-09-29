@@ -76,10 +76,10 @@ const Top = ({ metaData, tokenInfo, progressData }: any) => {
         </div>
         <div className="w-full px-[12px] py-[16px] bg-[#F8F8F8] mt-[20px] text-[12px] text-[#999] flex flex-col gap-[12px]">
             <div className="flex justify-between">
-                Total Supply<div className="text-[#101010]">13億</div>
+                Total Supply<div className="text-[#101010]">2B</div>
             </div>
             <div className="flex justify-between">
-                Bonding Curve<div className="text-[#101010]">10.5億</div>
+                Bonding Curve<div className="text-[#101010]">1.6B</div>
             </div>
             <div className="flex justify-between">
                 Bonding Curve Progress<div className="text-[#101010]">{progressData.progress}%</div>
