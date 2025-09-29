@@ -134,7 +134,7 @@ const Trade = ({ metaData, progressData }: any) => {
 
     return <div className="pb-[30px]">
         {
-            progressData.progress > 100 ? <>
+            progressData.progress != 100 ? <>
                 <TradePopup
                     isOpen={isTradePopupOpen}
                     onOpenChange={setIsTradePopupOpen}
