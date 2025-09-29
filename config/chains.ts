@@ -26,46 +26,46 @@ export const CHAINS_CONFIG = {
         //     },
         // },
         //
-        id: 2810,
-        name: "Morph Holesky",
-        nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
-        rpcUrls: {
-            default: {
-                http: ["https://rpc-holesky.morphl2.io"],
-                webSocket: ["wss://rpc-quicknode-holesky.morphl2.io"],
-            },
-        },
-        blockExplorers: {
-            default: {
-                name: "Morph Holesky Explorer",
-                url: "https://explorer-holesky.morphl2.io",
-                apiUrl: "https://explorer-api-holesky.morphl2.io/api?",
-            },
-        },
-        testnet: true,
-        // id: 9745,
-        // name: "Plasma",
-        // nativeCurrency: {
-        //     decimals: 18,
-        //     name: "XPL",
-        //     symbol: "XPL",
-        // },
+        // id: 2810,
+        // name: "Morph Holesky",
+        // nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
         // rpcUrls: {
-        //     default: { http: ["https://rpc.plasma.to"] },
+        //     default: {
+        //         http: ["https://rpc-holesky.morphl2.io"],
+        //         webSocket: ["wss://rpc-quicknode-holesky.morphl2.io"],
+        //     },
         // },
         // blockExplorers: {
         //     default: {
-        //         name: "Plasma Explorer",
-        //         url: "https://plasmascan.to/",
-        //         apiUrl: "https://plasmascan.to/",
+        //         name: "Morph Holesky Explorer",
+        //         url: "https://explorer-holesky.morphl2.io",
+        //         apiUrl: "https://explorer-api-holesky.morphl2.io/api?",
         //     },
         // },
-        // contracts: {
-        //     multicall3: {
-        //         address: "0xcA11bde05977b3631167028862bE2a173976CA11",
-        //         blockCreated: 0,
-        //     },
-        // },
+        // testnet: true,
+        id: 9745,
+        name: "Plasma",
+        nativeCurrency: {
+            decimals: 18,
+            name: "XPL",
+            symbol: "XPL",
+        },
+        rpcUrls: {
+            default: { http: ["https://rpc.plasma.to"] },
+        },
+        blockExplorers: {
+            default: {
+                name: "Plasma Explorer",
+                url: "https://plasmascan.to/",
+                apiUrl: "https://plasmascan.to/",
+            },
+        },
+        contracts: {
+            multicall3: {
+                address: "0xcA11bde05977b3631167028862bE2a173976CA11",
+                blockCreated: 0,
+            },
+        },
     },
 
     // 支持的链列表 - 按优先级排序
@@ -211,10 +211,10 @@ export const getCurrentChainConfig = () => ({
 // 合约地址配置
 export const CONTRACT_CONFIG = {
     // 工厂合约地址 - 用于创建新代币
-    TokenManager: "0x4787F0c2cF30868579E32cD4e9B461D5aEef8190" as const,
-    pEXOAirdrop: "0x3402978bF3139403843BBF44234b861c8B861b6F" as const,
-    // TokenManager: "0x542B50C391DC143F12B538093D24d14c585909DF" as const,
-    // pEXOAirdrop: "0x929D6684Bf29502b195ba993a2298A9b9afb09F6" as const,
+    // TokenManager: "0x4787F0c2cF30868579E32cD4e9B461D5aEef8190" as const,
+    // pEXOAirdrop: "0x3402978bF3139403843BBF44234b861c8B861b6F" as const,
+    TokenManager: "0x542B50C391DC143F12B538093D24d14c585909DF" as const,
+    pEXOAirdrop: "0x929D6684Bf29502b195ba993a2298A9b9afb09F6" as const,
 } as const;
 
 // Multicall3 合约地址 (通用地址，大多数链都支持)
