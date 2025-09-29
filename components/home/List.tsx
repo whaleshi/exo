@@ -508,18 +508,7 @@ const List = () => {
                     ))
                     : (
                         <div className="flex flex-col items-center justify-center py-[60px] pt-[100px]">
-                            <img
-                                src="/default.png"
-                                alt="default"
-                                className="w-[120px] h-[120px] opacity-50"
-                                onError={(e) => {
-                                    // 如果图片加载失败，使用默认图片或隐藏
-                                    e.currentTarget.style.display = 'none';
-                                }}
-                            />
-                            <div className="text-[#999] mt-[16px] text-[14px]">
-                                {searchQuery ? 'Nothing Here' : 'Nothing Here'}
-                            </div>
+                            <div className="text-[#999] mt-[16px] text-[14px]">Nothing Here</div>
                         </div>
                     );
             })()}

@@ -244,7 +244,7 @@ const SearchPage = () => {
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="搜尋戰壕..."
+                    placeholder="Search Token..."
                     className="h-[42px] flex-1 outline-none text-[16px] text-[#101010] placeholder:text-[#999] bg-transparent"
                     autoFocus
                 />
@@ -285,7 +285,7 @@ const SearchPage = () => {
                                 </div>
                                 <div>
                                     <span className="text-[11px] font-medium text-[rgba(170,170,170,1)]">
-                                        戰壕市值{" "}
+                                        MC{" "}
                                         <i className="not-italic text-[11px]  font-medium text-[#101010]">
                                             ${_bignumber(item?.info?.lastPrice ?? 0).div(1e18).times(1300000000).times(price ?? 0).dp(2).toString() || '--'}
                                         </i>
@@ -312,7 +312,6 @@ const SearchPage = () => {
                     ))
                 ) : (
                     <div className="flex flex-col items-center justify-center py-[60px] pt-[100px]">
-                        <img src="/default.png" alt="default" className="w-[120px] h-[120px] opacity-50" />
                         <div className="text-[#999] mt-[16px] text-[14px]">Nothing Here</div>
                     </div>
                 )

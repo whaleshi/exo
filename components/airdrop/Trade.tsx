@@ -47,17 +47,21 @@ const AirTrade = () => {
                 // 如果钱包已连接，获取用户质押信息
                 if (isConnected && address) {
                     const userStakeData = await airdropContract.getUserStakeInfo(address);
+                    const userAllocation = await airdropContract.getUserPEXOAllocation(address);
                     console.log(userStakeData)
+                    console.log('User PEXO Allocation:', userAllocation)
                     result.userStakeInfo = {
                         stakedAmount: ethers.formatEther(userStakeData[0]),
                         withdrawnPexo: ethers.formatEther(userStakeData[1]),
-                        stakeTime: Number(userStakeData[2])
+                        stakeTime: Number(userStakeData[2]),
+                        expectedReward: ethers.formatEther(userAllocation)
                     };
                 } else {
                     result.userStakeInfo = {
                         stakedAmount: "0",
                         withdrawnPexo: "0",
-                        stakeTime: 0
+                        stakeTime: 0,
+                        expectedReward: "0"
                     };
                 }
 
@@ -82,27 +86,29 @@ const AirTrade = () => {
     const userStakeInfo = stakingData?.userStakeInfo || {
         stakedAmount: "0",
         withdrawnPexo: "0",
-        stakeTime: 0
+        stakeTime: 0,
+        expectedReward: "0"
     };
 
-    // 计算进度百分比
+    // 计算进度百分比（倒计时：从100%减到0%）
     const calculateProgress = () => {
         if (stakingInfo.startTime === 0 || stakingInfo.endTime === 0) {
-            return 0; // 默认值
+            return 100; // 默认值为100%
         }
 
         const now = Math.floor(Date.now() / 1000);
         const totalDuration = stakingInfo.endTime - stakingInfo.startTime;
-        const elapsed = now - stakingInfo.startTime;
+        const timeLeft = stakingInfo.endTime - now;
 
-        if (elapsed <= 0) {
-            return 0; // 还未开始
+        if (now <= stakingInfo.startTime) {
+            return 100; // 还未开始，显示100%
         }
-        if (elapsed >= totalDuration) {
-            return 100; // 已结束
+        if (now >= stakingInfo.endTime) {
+            return 0; // 已结束，显示0%
         }
 
-        return Math.floor((elapsed / totalDuration) * 100);
+        // 计算剩余时间的百分比（从100%递减到0%）
+        return Math.floor((timeLeft / totalDuration) * 100);
     };
 
     // 计算倒计时
@@ -372,7 +378,7 @@ const AirTrade = () => {
                     <div className="text-[10px] text-[#999] mt-[2px]">Staked Already</div>
                 </div>
                 <div className="bg-[#F8F8F8] h-[54px] flex flex-col items-center justify-center">
-                    <div className="text-[12px] text-[#333] font-medium">-- pEXO</div>
+                    <div className="text-[12px] text-[#333] font-medium">{parseFloat(userStakeInfo.expectedReward).toFixed(2)} pEXO</div>
                     <div className="text-[10px] text-[#999] mt-[2px]">Expected Reward</div>
                 </div>
             </div>

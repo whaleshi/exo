@@ -18,7 +18,7 @@ const Home = () => {
                 <div className="relative flex flex-col items-center pt-[16px]">
                     <Image src="/banner.png" width={160} height={160} alt="logo" />
                     <div className="text-[18px] font-medium text-[#FFF] text-center">
-                        Build a Borderless Launchpad on Plasma
+                        Build a Borderless <br /> Launchpad on Plasma
                     </div>
                 </div>
                 <div className="w-full px-[16px] mt-[24px] md:mt-[32px] flex justify-center gap-[12px]">

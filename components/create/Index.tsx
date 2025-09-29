@@ -6,7 +6,7 @@ const Create = () => {
     const router = useRouter();
 
     return (
-        <div className="w-full max-w-[450px]">
+        <div className="w-full max-w-[450px] px-[16px]">
             <div className="flex items-center justify-between relative pt-[16px]">
                 <div onClick={() => router.push("/")} className="relative z-1 w-[40px] h-[40px] border border-[#F3F3F3] cursor-pointer flex items-center justify-center">
                     <BackIcon />
