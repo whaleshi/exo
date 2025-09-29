@@ -136,16 +136,16 @@ export const Navbar = () => {
                             <div className="flex flex-col items-start w-full gap-[20px] mt-[10px]">
                                 <Link className="text-[24px] text-[#fff]" href="/airdrop" onPress={() => setIsMenuOpen(false)}>$EXO Airdrop</Link>
                                 <Link className="text-[24px] text-[#fff]" href="/create" onPress={() => setIsMenuOpen(false)}>Launch a token</Link>
-                                <Link className="text-[24px] text-[#fff]" isExternal aria-label="x" href={siteConfig.links.work}>How it works?</Link>
+                                <Link className="text-[24px] text-[#fff]" isExternal aria-label="work" href={siteConfig.links.work}>How it works?</Link>
                                 <Link className="text-[24px] text-[#fff]" isExternal aria-label="x" href={siteConfig.links.x}>Follow us on X</Link>
-                                <Link className="text-[24px] text-[#fff]" isExternal aria-label="x" href={siteConfig.links.x}>Join Community</Link>
+                                <Link className="text-[24px] text-[#fff]" isExternal aria-label="tg" href={siteConfig.links.tg}>Join Community</Link>
                                 <Button
                                     isExternal
                                     as={Link}
                                     radius="none"
                                     className="h-[48px] text-sm font-normal text-[#333] bg-[#fff] border-1 border-[#F3F3F3] text-[14px]"
                                     variant="flat"
-                                    onPress={() => { window.open("", "_blank") }}
+                                    onPress={() => { window.open("https://app.plasma.to/", "_blank") }}
                                 >
                                     Buy $XPL
                                 </Button>

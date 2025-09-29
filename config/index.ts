@@ -36,6 +36,32 @@ const localhost: AppKitNetwork = {
     },
 };
 
+const plasma: AppKitNetwork = {
+    id: 9745,
+    name: "Plasma",
+    nativeCurrency: {
+        decimals: 18,
+        name: "XPL",
+        symbol: "XPL",
+    },
+    rpcUrls: {
+        default: { http: ["https://rpc.plasma.to"] },
+    },
+    blockExplorers: {
+        default: {
+            name: "Plasma Explorer",
+            url: "https://plasmascan.to/",
+            apiUrl: "https://plasmascan.to/",
+        },
+    },
+    contracts: {
+        multicall3: {
+            address: "0xcA11bde05977b3631167028862bE2a173976CA11",
+            blockCreated: 0,
+        },
+    },
+};
+
 export const networks = [morphHolesky] as [AppKitNetwork, ...AppKitNetwork[]];
 
 export const ethersAdapter = new EthersAdapter();

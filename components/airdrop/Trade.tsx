@@ -33,7 +33,7 @@ const AirTrade = () => {
 
                 // 获取总体质押信息
                 const stakingInfo = await airdropContract.getStakingInfo();
-                console.log(stakingInfo)
+                console.log("Staking info:", stakingInfo);
 
                 const result: any = {
                     stakingInfo: {
@@ -48,14 +48,31 @@ const AirTrade = () => {
                 if (isConnected && address) {
                     const userStakeData = await airdropContract.getUserStakeInfo(address);
                     const userAllocation = await airdropContract.getUserPEXOAllocation(address);
-                    console.log(userStakeData)
-                    console.log('User PEXO Allocation:', userAllocation)
+                    
+                    console.log("User stake data:", userStakeData);
+                    console.log("User PEXO allocation:", userAllocation);
+                    console.log("User allocation type:", typeof userAllocation, "Array:", Array.isArray(userAllocation));
+
+                    // 处理 getUserPEXOAllocation 的返回值
+                    let expectedReward = "0";
+                    try {
+                        // 如果 userAllocation 是数组或者有索引访问
+                        if (userAllocation && userAllocation[0] !== undefined) {
+                            expectedReward = ethers.formatEther(userAllocation[0]);
+                        } else if (userAllocation) {
+                            expectedReward = ethers.formatEther(userAllocation);
+                        }
+                    } catch (error) {
+                        console.error("Error formatting expected reward:", error);
+                        expectedReward = "0";
+                    }
+
                     result.userStakeInfo = {
                         stakedAmount: ethers.formatEther(userStakeData[0]),
                         withdrawnPexo: ethers.formatEther(userStakeData[1]),
                         stakeTime: Number(userStakeData[2]),
-                        hasWithdrawn: Boolean(userStakeData[3]), // 第四个参数：是否已提现
-                        expectedReward: ethers.formatEther(userAllocation)
+                        hasWithdrawn: Boolean(userStakeData[3]),
+                        expectedReward: expectedReward
                     };
                 } else {
                     result.userStakeInfo = {
