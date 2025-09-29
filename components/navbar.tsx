@@ -103,7 +103,7 @@ export const Navbar = () => {
                     </Button>
                 }
                 <div className="w-[36px] h-[36px] border-1 border-[#F3F3F3] flex items-center justify-center bg-[#101010]">
-                    <NavbarMenuToggle className="text-[#FFF] cursor-pointer" onClick={() => { setIsMenuOpen(!isMenuOpen); setType(2); }} />
+                    <NavbarMenuToggle className="text-[#FFF] cursor-pointer w-6 h-6 scale-75" onClick={() => { setIsMenuOpen(!isMenuOpen); setType(2); }} />
                 </div>
             </NavbarContent>
             <NavbarMenu className={`px-[16px] ${type === 1 ? 'bg-[#FFF]' : 'bg-[#101010]'}`}>
