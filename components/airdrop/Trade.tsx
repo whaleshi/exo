@@ -54,6 +54,7 @@ const AirTrade = () => {
                         stakedAmount: ethers.formatEther(userStakeData[0]),
                         withdrawnPexo: ethers.formatEther(userStakeData[1]),
                         stakeTime: Number(userStakeData[2]),
+                        hasWithdrawn: Boolean(userStakeData[3]), // 第四个参数：是否已提现
                         expectedReward: ethers.formatEther(userAllocation)
                     };
                 } else {
@@ -61,6 +62,7 @@ const AirTrade = () => {
                         stakedAmount: "0",
                         withdrawnPexo: "0",
                         stakeTime: 0,
+                        hasWithdrawn: false,
                         expectedReward: "0"
                     };
                 }
@@ -87,6 +89,7 @@ const AirTrade = () => {
         stakedAmount: "0",
         withdrawnPexo: "0",
         stakeTime: 0,
+        hasWithdrawn: false,
         expectedReward: "0"
     };
 
@@ -137,6 +140,13 @@ const AirTrade = () => {
 
         if (!address || !walletProvider) {
             toast.error('Please connect the wallet first', { icon: null });
+            return;
+        }
+
+        // 检查活动是否已结束
+        const now = Math.floor(Date.now() / 1000);
+        if (now >= stakingInfo.endTime) {
+            toast.error('Staking period has ended', { icon: null });
             return;
         }
 
@@ -222,6 +232,12 @@ const AirTrade = () => {
 
         if (!address || !walletProvider) {
             toast.error('Please connect the wallet first', { icon: null });
+            return;
+        }
+
+        // 检查是否已提现
+        if (userStakeInfo.hasWithdrawn) {
+            toast.error('You have already withdrawn your stake', { icon: null });
             return;
         }
 
@@ -366,10 +382,15 @@ const AirTrade = () => {
             <button
                 className="w-full h-[48px] bg-[#569F8C] text-[#FFF] text-[12px] font-medium rounded-none mt-[16px] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={handleStake}
-                disabled={isStaking}
+                disabled={isStaking || (Date.now() / 1000 >= stakingInfo.endTime)}
             >
-                {isStaking ? 'Staking...' : !isConnected ? 'Connect Wallet' : 'Stake Now'}
-                <div className="text-[10px] text-[#FFF] opacity-80 font-normal">Minimum Stake 2 XPL</div>
+                {isStaking ? 'Staking...' : 
+                 !isConnected ? 'Connect Wallet' : 
+                 (Date.now() / 1000 >= stakingInfo.endTime) ? 'Stake Ended' : 
+                 'Stake Now'}
+                <div className="text-[10px] text-[#FFF] opacity-80 font-normal">
+                    {(Date.now() / 1000 >= stakingInfo.endTime) ? 'Staking period has ended' : 'Minimum Stake 2 XPL'}
+                </div>
             </button>
             {/* 已经质押/预计奖励区块 */}
             <div className="grid grid-cols-2 gap-[12px] mt-[16px]">
@@ -386,19 +407,21 @@ const AirTrade = () => {
             <div className="w-full flex gap-[12px] mt-[16px]">
                 <div className="flex-1">
                     <button
-                        className={`w-full h-[48px] text-[#FFF] text-[12px] font-medium rounded-none ${!isConnected || parseFloat(userStakeInfo.stakedAmount) <= 0 || Date.now() / 1000 < stakingInfo.endTime
+                        className={`w-full h-[48px] text-[#FFF] text-[12px] font-medium rounded-none ${!isConnected || parseFloat(userStakeInfo.stakedAmount) <= 0 || Date.now() / 1000 < stakingInfo.endTime || userStakeInfo.hasWithdrawn
                             ? 'bg-[#E99A9A] cursor-not-allowed'
                             : 'bg-[#EB4B6D] cursor-pointer'
                             }`}
-                        disabled={isWithdrawing || !isConnected || parseFloat(userStakeInfo.stakedAmount) <= 0 || Date.now() / 1000 < stakingInfo.endTime}
+                        disabled={isWithdrawing || !isConnected || parseFloat(userStakeInfo.stakedAmount) <= 0 || Date.now() / 1000 < stakingInfo.endTime || userStakeInfo.hasWithdrawn}
                         onClick={handleWithdraw}
                     >
                         {!isConnected ? 'Connect Wallet' :
                             parseFloat(userStakeInfo.stakedAmount) <= 0 ? 'No Stakes' :
-                                Date.now() / 1000 < stakingInfo.endTime ? 'Redeem All' :
-                                    isWithdrawing ? 'Withdrawing...' : 'Redeem All'}
+                                userStakeInfo.hasWithdrawn ? 'Already Withdrawn' :
+                                    Date.now() / 1000 < stakingInfo.endTime ? 'Redeem All' :
+                                        isWithdrawing ? 'Withdrawing...' : 'Redeem All'}
                         <div className="text-[10px] mt-[2px] text-[#FFF] opacity-80 font-normal">
-                            {Date.now() / 1000 < stakingInfo.endTime ? countdown : 'Available Now'}
+                            {userStakeInfo.hasWithdrawn ? 'You have withdrawn' :
+                                Date.now() / 1000 < stakingInfo.endTime ? countdown : 'Available Now'}
                         </div>
                     </button>
                 </div>
