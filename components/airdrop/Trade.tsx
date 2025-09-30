@@ -160,10 +160,14 @@ const AirTrade = () => {
             return;
         }
 
-        // 检查活动是否已结束
+        // 检查活动是否已结束或未开始
         const now = Math.floor(Date.now() / 1000);
         if (now >= stakingInfo.endTime) {
             toast.error('Staking period has ended', { icon: null });
+            return;
+        }
+        if (now < stakingInfo.startTime) {
+            toast.error('Staking period has not started yet', { icon: null });
             return;
         }
 
@@ -399,14 +403,17 @@ const AirTrade = () => {
             <button
                 className="w-full h-[48px] bg-[#569F8C] text-[#FFF] text-[12px] font-medium rounded-none mt-[16px] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={handleStake}
-                disabled={isStaking || (Date.now() / 1000 >= stakingInfo.endTime)}
+                disabled={isStaking || (Date.now() / 1000 >= stakingInfo.endTime) || (Date.now() / 1000 < stakingInfo.startTime)}
             >
                 {isStaking ? 'Staking...' : 
                  !isConnected ? 'Connect Wallet' : 
-                 (Date.now() / 1000 >= stakingInfo.endTime) ? 'Stake Ended' : 
+                 (Date.now() / 1000 >= stakingInfo.endTime) ? 'Stake Ended' :
+                 (Date.now() / 1000 < stakingInfo.startTime) ? 'Not Started' :
                  'Stake Now'}
                 <div className="text-[10px] text-[#FFF] opacity-80 font-normal">
-                    {(Date.now() / 1000 >= stakingInfo.endTime) ? 'Staking period has ended' : 'Minimum Stake 2 XPL'}
+                    {(Date.now() / 1000 >= stakingInfo.endTime) ? 'Staking period has ended' :
+                     (Date.now() / 1000 < stakingInfo.startTime) ? 'Staking period not started' :
+                     'Minimum Stake 2 XPL'}
                 </div>
             </button>
             {/* 已经质押/预计奖励区块 */}

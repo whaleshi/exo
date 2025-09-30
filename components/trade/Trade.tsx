@@ -20,9 +20,10 @@ interface TradeProps {
     tokenAddress?: string; // token address for trading
     balances?: any; // user's token balance
     metaData?: any; // token metadata
+    progress?: number; // trading progress percentage
 }
 
-export default function Trade({ isOpen = false, onOpenChange, initialMode = true, tokenAddress, balances, metaData }: TradeProps) {
+export default function Trade({ isOpen = false, onOpenChange, initialMode = true, tokenAddress, balances, metaData, progress }: TradeProps) {
     const [isBuy, setIsBuy] = useState(initialMode);
     const [isSlippageOpen, setIsSlippageOpen] = useState(false);
     const [inputAmount, setInputAmount] = useState("");
@@ -33,33 +34,56 @@ export default function Trade({ isOpen = false, onOpenChange, initialMode = true
     const { open } = useAppKit();
     const queryClient = useQueryClient();
 
-    // 使用自定义trading hooks
-    const { handleBuy, handleSell, isConnected, address } = useTokenTrading();
+    // 使用自定义trading hooks - 包含内盘和外盘方法
+    const { handleBuy, handleSell, handleSwapBuy, handleSwapSell, isConnected, address } = useTokenTrading();
     const { slippage } = useSlippageStore();
 
     // 预估输出金额 - 当输入框有值时每3秒调用一次
     const { data: estimatedOutput } = useQuery({
-        queryKey: ['estimateOutput', tokenAddress, inputAmount, isBuy, address],
+        queryKey: ['estimateOutput', tokenAddress, inputAmount, isBuy, address, progress],
         queryFn: async () => {
             if (!inputAmount || !tokenAddress || !isConnected || !address || parseFloat(inputAmount) <= 0) {
                 return '0';
             }
 
             try {
-                const contractABI = (await import('@/constant/abi.json')).default;
-                const provider = new ethers.JsonRpcProvider(DEFAULT_CHAIN_CONFIG.rpcUrl);
-                const readOnlyContract = new ethers.Contract(CONTRACT_CONFIG.TokenManager, contractABI, provider);
+                // 根据 progress 值决定使用内盘还是外盘预估
+                const useExternalSwap = progress === 100;
 
-                if (isBuy) {
-                    // 调用 tryBuy 获取预期代币输出
-                    const result = await readOnlyContract.tryBuy(tokenAddress, ethers.parseEther(inputAmount));
-                    const tokenAmountOut = result[0];
-                    return ethers.formatEther(tokenAmountOut);
+                if (useExternalSwap) {
+                    // 使用外盘 Swap 预估
+                    const swapABI = (await import('@/constant/Swap.json')).default;
+                    const provider = new ethers.JsonRpcProvider(DEFAULT_CHAIN_CONFIG.rpcUrl);
+                    const routerContract = new ethers.Contract(CONTRACT_CONFIG.ROUTER_CONTRACT, swapABI, provider);
+
+                    if (isBuy) {
+                        // 外盘买入：ETH -> Token
+                        const path = [CONTRACT_CONFIG.WETH_ADDRESS, tokenAddress];
+                        const amounts = await routerContract.getAmountsOut(ethers.parseEther(inputAmount), path);
+                        return ethers.formatEther(amounts[1]);
+                    } else {
+                        // 外盘卖出：Token -> ETH
+                        const path = [tokenAddress, CONTRACT_CONFIG.WETH_ADDRESS];
+                        const amounts = await routerContract.getAmountsOut(ethers.parseEther(inputAmount), path);
+                        return ethers.formatEther(amounts[1]);
+                    }
                 } else {
-                    // 调用 trySell 获取预期ETH输出
-                    const sellAmount = ethers.parseEther(inputAmount);
-                    const result = await readOnlyContract.trySell(tokenAddress, sellAmount);
-                    return ethers.formatEther(result);
+                    // 使用内盘预估
+                    const contractABI = (await import('@/constant/TokenManager.abi.json')).default;
+                    const provider = new ethers.JsonRpcProvider(DEFAULT_CHAIN_CONFIG.rpcUrl);
+                    const readOnlyContract = new ethers.Contract(CONTRACT_CONFIG.TokenManager, contractABI, provider);
+
+                    if (isBuy) {
+                        // 调用 tryBuy 获取预期代币输出
+                        const result = await readOnlyContract.tryBuy(tokenAddress, ethers.parseEther(inputAmount));
+                        const tokenAmountOut = result[0];
+                        return ethers.formatEther(tokenAmountOut);
+                    } else {
+                        // 调用 trySell 获取预期ETH输出
+                        const sellAmount = ethers.parseEther(inputAmount);
+                        const result = await readOnlyContract.trySell(tokenAddress, sellAmount);
+                        return ethers.formatEther(result);
+                    }
                 }
             } catch (error) {
                 console.error('预估输出失败:', error);
@@ -135,10 +159,17 @@ export default function Trade({ isOpen = false, onOpenChange, initialMode = true
                     const userBalance = _bignumber(balances?.tokenBalance);
                     const percentage = _bignumber(amount.value);
                     const sellAmount = userBalance.times(percentage);
-
-                    // 格式化结果，去除尾随零
+                    console.log('用户余额:', userBalance.toString());
+                    // 格式化结果，正确处理小数点后的尾随零
                     const formattedAmount = sellAmount.dp(18, _bignumber.ROUND_DOWN).toFixed();
-                    setInputAmount(formattedAmount.replace(/\.?0+$/, ''));
+                    console.log('计算卖出金额:', formattedAmount);
+
+                    // 只有当包含小数点时才去除尾随零，避免删除整数末尾的有意义零
+                    const finalAmount = formattedAmount.includes('.') ?
+                        formattedAmount.replace(/\.?0+$/, '') :
+                        formattedAmount;
+
+                    setInputAmount(finalAmount);
                 } catch (error) {
                     console.error('計算賣出金額失敗:', error);
                     setInputAmount('0');
@@ -169,12 +200,29 @@ export default function Trade({ isOpen = false, onOpenChange, initialMode = true
             // 使用传入的tokenAddress，如果没有则使用默认地址
             const currentTokenAddress = tokenAddress as string;
 
+            // 根据 progress 值决定使用内盘还是外盘方法
+            const useExternalSwap = progress === 100;
+
             if (isBuy) {
-                const result = await handleBuy(currentTokenAddress, inputAmount);
-                toast.success(`Buy Successful ✌️`, { icon: null });
+                if (useExternalSwap) {
+                    // 当 progress 为 100 时，使用外盘 Swap 买入
+                    await handleSwapBuy(currentTokenAddress, inputAmount);
+                    toast.success(`External Swap Buy Successful ✌️`, { icon: null });
+                } else {
+                    // 正常情况使用内盘买入
+                    await handleBuy(currentTokenAddress, inputAmount);
+                    toast.success(`Buy Successful ✌️`, { icon: null });
+                }
             } else {
-                const result = await handleSell(currentTokenAddress, inputAmount);
-                toast.success(`Sell Successful ✌️`, { icon: null });
+                if (useExternalSwap) {
+                    // 当 progress 为 100 时，使用外盘 Swap 卖出
+                    await handleSwapSell(currentTokenAddress, inputAmount);
+                    toast.success(`External Swap Sell Successful ✌️`, { icon: null });
+                } else {
+                    // 正常情况使用内盘卖出
+                    await handleSell(currentTokenAddress, inputAmount);
+                    toast.success(`Sell Successful ✌️`, { icon: null });
+                }
             }
 
             await queryClient.invalidateQueries({
@@ -188,7 +236,8 @@ export default function Trade({ isOpen = false, onOpenChange, initialMode = true
             setInputAmount("");
             setOutputAmount("");
         } catch (error: any) {
-            toast.error(`${isBuy ? 'Buy Failed, Please Retry 😭' : 'Sell Failed, Please Retry 😭'}`, { icon: null });
+            const tradeType = progress === 100 ? 'External Swap' : '';
+            toast.error(`${tradeType} ${isBuy ? 'Buy Failed, Please Retry 😭' : 'Sell Failed, Please Retry 😭'}`, { icon: null });
         } finally {
             setIsLoading(false);
         }

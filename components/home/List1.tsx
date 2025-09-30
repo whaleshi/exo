@@ -6,7 +6,7 @@ import _bignumber from "bignumber.js";
 import Link from "next/link";
 import { ethers } from "ethers";
 import { CONTRACT_CONFIG, DEFAULT_CHAIN_CONFIG, MULTICALL3_ADDRESS, MULTICALL3_ABI } from "@/config/chains";
-import FactoryABI from "@/constant/abi.json";
+import FactoryABI from "@/constant/TokenManager.abi.json";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 

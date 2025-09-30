@@ -3,7 +3,7 @@ import { useRouter, useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { ethers } from "ethers";
 import { CONTRACT_CONFIG, DEFAULT_CHAIN_CONFIG } from "@/config/chains";
-import FactoryABI from "@/constant/abi.json";
+import FactoryABI from "@/constant/TokenManager.abi.json";
 import _bignumber from "bignumber.js";
 import Image from "next/image";
 import useClipboard from '@/hooks/useClipboard';

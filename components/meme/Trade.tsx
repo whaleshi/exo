@@ -133,7 +133,7 @@ const Trade = ({ metaData, progressData }: any) => {
     };
 
     return <div className="pb-[30px]">
-        {
+        {/* {
             progressData.progress != 100 ? <>
                 <TradePopup
                     isOpen={isTradePopupOpen}
@@ -142,6 +142,7 @@ const Trade = ({ metaData, progressData }: any) => {
                     tokenAddress={params.addr as string}
                     balances={balances}
                     metaData={metaData}
+                    progress={progressData.progress}
                 />
                 {
                     hasTokenBalance ? <Button
@@ -208,8 +209,61 @@ const Trade = ({ metaData, progressData }: any) => {
                     去 Defined.fi 交易
                 </Button>
             </>
+        } */}
+        <TradePopup
+            isOpen={isTradePopupOpen}
+            onOpenChange={setIsTradePopupOpen}
+            initialMode={tradeMode}
+            tokenAddress={params.addr as string}
+            balances={balances}
+            metaData={metaData}
+            progress={progressData.progress}
+        />
+        {
+            hasTokenBalance ? <Button
+                radius="none"
+                className={`w-full h-[48px] border-1 text-[14px] bg-[#FDD9ED] border-[#EB4B6D] text-[#EB4B6D]`}
+                disabled={isSellAllLoading}
+                isLoading={isSellAllLoading}
+                onPress={handleSellAll}
+            >
+                {isSellAllLoading ? 'Trading...' : 'All Sell'}
+            </Button> : <Button
+                radius="none"
+                className="w-full h-[48px] bg-[#DDEFEA] border-[#569F8C] border-1 text-[14px] text-[#569F8C]"
+                disabled={isQuickBuyLoading}
+                isLoading={isQuickBuyLoading}
+                onPress={handleQuickBuy}
+            >
+                {isQuickBuyLoading ? 'Trading...' : 'Quick Buy 50 XPL'}
+            </Button>
         }
-
+        <div className="mt-[12px] flex gap-[12px]">
+            {
+                hasTokenBalance && <Button
+                    radius="none"
+                    className={`w-full h-[48px] border-1 text-[14px] bg-[#EB4B6D] border-[#EB4B6D] text-[#FFF]`}
+                    onPress={() => {
+                        if (hasTokenBalance) {
+                            setTradeMode(false); // 设置为卖出模式
+                            setIsTradePopupOpen(true);
+                        }
+                    }}
+                >
+                    Sell
+                </Button>
+            }
+            <Button
+                radius="none"
+                className="w-full h-[48px] bg-[#569F8C] border-[#569F8C] border-1 text-[14px] text-[#FFF]"
+                onPress={() => {
+                    setTradeMode(true); // 设置为买入模式
+                    setIsTradePopupOpen(true);
+                }}
+            >
+                {hasTokenBalance ? 'Buy' : 'Buy Now'}
+            </Button>
+        </div>
     </div>;
 }
 

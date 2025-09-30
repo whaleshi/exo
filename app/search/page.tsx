@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ethers } from "ethers";
 import _bignumber from "bignumber.js";
 import { CONTRACT_CONFIG, DEFAULT_CHAIN_CONFIG, MULTICALL3_ADDRESS, MULTICALL3_ABI } from "@/config/chains";
-import FactoryABI from "@/constant/abi.json";
+import FactoryABI from "@/constant/TokenManager.abi.json";
 import useOkxPrice from "@/hooks/useOkxPrice";
 
 const CloseIcon = (props: any) => (

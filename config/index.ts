@@ -62,6 +62,6 @@ const plasma: AppKitNetwork = {
     },
 };
 
-export const networks = [plasma] as [AppKitNetwork, ...AppKitNetwork[]];
+export const networks = [localhost] as [AppKitNetwork, ...AppKitNetwork[]];
 
 export const ethersAdapter = new EthersAdapter();
