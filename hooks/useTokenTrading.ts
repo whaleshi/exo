@@ -297,6 +297,7 @@ export const useTokenTrading = () => {
         }
 
         const swapABI = (await import("@/constant/Swap.json")).default;
+        const tokenManagerABI = (await import("@/constant/TokenManager.abi.json")).default;
 
         const provider = new ethers.JsonRpcProvider(DEFAULT_CHAIN_CONFIG.rpcUrl);
         const ethersProvider = new ethers.BrowserProvider(walletProvider as any);
@@ -339,7 +340,7 @@ export const useTokenTrading = () => {
         const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20分钟后过期
 
         // 4. 估算 gas
-        const routerContractWithSigner = new ethers.Contract(CONTRACT_CONFIG.ROUTER_CONTRACT, swapABI, signer);
+        const routerContractWithSigner = new ethers.Contract(CONTRACT_CONFIG.TokenManager, tokenManagerABI, signer);
         let gasLimit;
         try {
             const estimatedGas = await routerContractWithSigner.swapExactETHForTokens.estimateGas(
@@ -409,6 +410,7 @@ export const useTokenTrading = () => {
         }
 
         const swapABI = (await import("@/constant/Swap.json")).default;
+        const tokenManagerABI = (await import("@/constant/TokenManager.abi.json")).default;
 
         const provider = new ethers.JsonRpcProvider(DEFAULT_CHAIN_CONFIG.rpcUrl);
         const ethersProvider = new ethers.BrowserProvider(walletProvider as any);
@@ -466,7 +468,7 @@ export const useTokenTrading = () => {
         const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20分钟后过期
 
         // 4. 检查和执行授权
-        const allowance = await tokenContract.allowance(address, CONTRACT_CONFIG.ROUTER_CONTRACT);
+        const allowance = await tokenContract.allowance(address, CONTRACT_CONFIG.TokenManager);
         console.log("当前授权额度:", allowance.toString());
 
         // 获取 gas price
@@ -486,7 +488,7 @@ export const useTokenTrading = () => {
             // 估算 approve 的 gas limit
             let approveGasLimit;
             try {
-                const estimatedGas = await tokenContract.approve.estimateGas(CONTRACT_CONFIG.ROUTER_CONTRACT, ethers.MaxUint256);
+                const estimatedGas = await tokenContract.approve.estimateGas(CONTRACT_CONFIG.TokenManager, ethers.MaxUint256);
                 approveGasLimit = estimatedGas + (estimatedGas * BigInt(20)) / BigInt(100); // 正确的+20%
                 console.log("Approve 预估 Gas Limit:", approveGasLimit.toString());
             } catch (e) {
@@ -506,7 +508,7 @@ export const useTokenTrading = () => {
             }
 
             const approveResult = await tokenContract.approve(
-                CONTRACT_CONFIG.ROUTER_CONTRACT,
+                CONTRACT_CONFIG.TokenManager,
                 ethers.MaxUint256,
                 approveTxOptions
             );
@@ -518,7 +520,7 @@ export const useTokenTrading = () => {
         }
 
         // 5. 估算 swap 的 gas limit
-        const routerContractWithSigner = new ethers.Contract(CONTRACT_CONFIG.ROUTER_CONTRACT, swapABI, signer);
+        const routerContractWithSigner = new ethers.Contract(CONTRACT_CONFIG.TokenManager, tokenManagerABI, signer);
         let swapGasLimit;
         try {
             const estimatedGas = await routerContractWithSigner.swapExactTokensForETH.estimateGas(
