@@ -30,7 +30,7 @@ const AirBanner = () => {
                     <Button
                         className="h-[48px] opacity-100 bg-[#FFF] text-[#101010] w-[150px] md:w-[180px]"
                         radius="none"
-                        onPress={() => { window.open("https://x.com/ExoPadFun/status/1972326413987676279", "_blank") }}
+                        onPress={() => { window.open("https://x.com/exopadfun/status/1972960993870483943?s=46&t=sKCMgE2u8cDlKJdlNM2zWQ", "_blank") }}
                     >
                         Read Docs
                     </Button>

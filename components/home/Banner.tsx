@@ -23,7 +23,7 @@ const Home = () => {
                 </div>
                 <div className="w-full px-[16px] mt-[24px] md:mt-[32px] flex justify-center gap-[12px]">
                     <Button className="h-[48px] border-[0.5px] border-solid border-[#F3F3F3] w-[150px] md:w-[180px] bg-[#101010] text-[#FFF] f600" radius="none"
-                        onPress={() => { window.open("https://x.com/ExoPadFun/status/1972326413987676279", "_blank") }}
+                        onPress={() => { window.open("https://x.com/exopadfun/status/1972960993870483943?s=46&t=sKCMgE2u8cDlKJdlNM2zWQ", "_blank") }}
                     >
                         Mechanism
                     </Button>
