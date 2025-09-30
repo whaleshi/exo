@@ -95,7 +95,7 @@ export const useTokenTrading = () => {
 
         const txOptions = {
             value: ethers.parseEther(ethAmount),
-            type: 0, // 强制使用 Legacy 交易类型
+            // type: 0, // 强制使用 Legacy 交易类型
         } as any;
 
         if (gasLimit) {
@@ -208,7 +208,7 @@ export const useTokenTrading = () => {
             const newGasPrice = gasPrice ? gasPrice + (gasPrice * BigInt(5)) / BigInt(100) : null; // +5%
 
             const approveTxOptions = {
-                type: 0, // 强制使用 Legacy 交易类型
+                // type: 0, // 强制使用 Legacy 交易类型
             } as any;
 
             if (approveGasLimit) {
@@ -257,7 +257,7 @@ export const useTokenTrading = () => {
         });
 
         const sellTxOptions = {
-            type: 0, // 强制使用 Legacy 交易类型
+            // type: 0, // 强制使用 Legacy 交易类型
         } as any;
 
         if (sellGasLimit) {
@@ -371,7 +371,7 @@ export const useTokenTrading = () => {
 
         const txOptions = {
             value: amount,
-            type: 0, // 强制使用 Legacy 交易类型
+            // type: 0, // 强制使用 Legacy 交易类型
         } as any;
 
         if (gasLimit) {
@@ -497,7 +497,7 @@ export const useTokenTrading = () => {
             }
 
             const approveTxOptions = {
-                type: 0, // 强制使用 Legacy 交易类型
+                // type: 0, // 强制使用 Legacy 交易类型
             } as any;
 
             if (approveGasLimit) {
@@ -507,11 +507,7 @@ export const useTokenTrading = () => {
                 approveTxOptions.gasPrice = newGasPrice;
             }
 
-            const approveResult = await tokenContract.approve(
-                CONTRACT_CONFIG.TokenManager,
-                ethers.MaxUint256,
-                approveTxOptions
-            );
+            const approveResult = await tokenContract.approve(CONTRACT_CONFIG.TokenManager, ethers.MaxUint256, approveTxOptions);
 
             console.log("授权交易已发送:", approveResult.hash);
             const approveReceipt = await approveResult.wait();
@@ -545,7 +541,7 @@ export const useTokenTrading = () => {
         console.log("AmountOutMin:", amountOutMin.toString());
 
         const sellTxOptions = {
-            type: 0, // 强制使用 Legacy 交易类型
+            // type: 0, // 强制使用 Legacy 交易类型
         } as any;
 
         if (swapGasLimit) {
