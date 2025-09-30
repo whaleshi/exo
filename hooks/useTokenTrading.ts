@@ -329,10 +329,10 @@ export const useTokenTrading = () => {
         const amounts = await routerContract.getAmountsOut(amount, path);
 
         const expectedTokenOut = amounts[1]; // 预期的代币输出量
-        const slippagePercentage = slippage;
+        const slippagePercentage = slippage + 1.5; // 默认滑点 + 1.5%
         const amountOutMin = (expectedTokenOut * BigInt(Math.floor((100 - slippagePercentage) * 100))) / BigInt(10000);
 
-        console.log(`使用滑点: ${slippage}%`);
+        console.log(`使用滑点: ${slippagePercentage}% (默认${slippage}% + 1.5%)`);
         console.log("预期代币输出:", ethers.formatEther(expectedTokenOut));
         console.log("最小代币输出:", ethers.formatEther(amountOutMin));
 
@@ -457,10 +457,10 @@ export const useTokenTrading = () => {
         const amounts = await routerContract.getAmountsOut(sellAmount, path);
 
         const expectedEthOut = amounts[1]; // 预期的 ETH 输出量
-        const slippagePercentage = slippage;
+        const slippagePercentage = slippage + 1.5; // 默认滑点 + 1.5%
         const amountOutMin = (expectedEthOut * BigInt(Math.floor((100 - slippagePercentage) * 100))) / BigInt(10000);
 
-        console.log(`使用滑点: ${slippage}%`);
+        console.log(`使用滑点: ${slippagePercentage}% (默认${slippage}% + 1.5%)`);
         console.log("预期 ETH 输出:", ethers.formatEther(expectedEthOut));
         console.log("最小 ETH 输出:", ethers.formatEther(amountOutMin));
 
