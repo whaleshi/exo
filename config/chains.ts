@@ -74,7 +74,7 @@ export const CHAINS_CONFIG = {
             symbol: "ETH",
         },
         rpcUrls: {
-            default: { http: ["http://72.167.44.157:8545"] },
+            default: { http: ["https://rpc.okbro.fun"] },
         },
         blockExplorers: {
             default: {
@@ -102,7 +102,7 @@ export const CHAINS_CONFIG = {
                 symbol: "ETH",
             },
             rpcUrls: {
-                default: { http: ["http://72.167.44.157:8545"] },
+                default: { http: ["https://rpc.okbro.fun"] },
             },
             blockExplorers: {
                 default: {
@@ -195,7 +195,7 @@ export const CHAINS_CONFIG = {
             name: "Localhost",
             symbol: "ETH",
             explorerUrl: "http://localhost:8888",
-            rpcUrl: "http://72.167.44.157:8545",
+            rpcUrl: "https://rpc.okbro.fun",
         },
         [196]: {
             name: "X Layer",

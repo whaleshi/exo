@@ -19,7 +19,7 @@ const localhost: AppKitNetwork = {
         symbol: "ETH",
     },
     rpcUrls: {
-        default: { http: ["http://72.167.44.157:8545"] },
+        default: { http: ["https://rpc.okbro.fun"] },
     },
     blockExplorers: {
         default: {
